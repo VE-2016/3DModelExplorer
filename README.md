@@ -23,7 +23,8 @@ Open 3dModelExplorer.sln in Visual Studio, build an run.
 # User Interface
 
 1. Menu and Toolbar commands
-2. Three panels:
+2. Search panel with control to place search text and 'Search Model' button
+3. Three panels:
    * Imporers with pages
      * Loaded XML
      * Search - results of search 
