@@ -20,6 +20,14 @@ Copy build files into Libraries directory.
 
 Open 3dModelExplorer.sln in Visual Studio, build an run.
 
+# User Interface
+
+1. Menu and Toolbar commands
+2. Three panels:
+..1. Imporers with pages
+..2. 3D Model Viewer
+..3. Models page
+
 # Workflows
 
 There are three main ways to explore 3D particle views.
@@ -32,5 +40,5 @@ Selection of the file, displays the 3D model view and saves the model into Model
 3. Entering desired phrase in the search box and pressing Search Model button, displays list of retrieved compounds and particles. 
 After selecting particles names in the 'Search' tab -> models are retrieved and created in the 'Models' tab
 
-![Optional Text](./Resources/3DModelExplorer.png)
+![Main Application View](./Resources/3DModelExplorer.png)
 
