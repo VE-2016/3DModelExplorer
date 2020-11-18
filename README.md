@@ -14,7 +14,7 @@ Particles are then visualized in Helix3D library.
 
 Build Helix3D library from repository.
 
-Copy cuild files into Libraries directory.
+Copy build files into Libraries directory.
 
 Open 3dModelExplorer.sln in Visual Studio, build an run.
 
