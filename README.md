@@ -25,6 +25,9 @@ Open 3dModelExplorer.sln in Visual Studio, build an run.
 1. Menu and Toolbar commands
 2. Three panels:
    * Imporers with pages
+     * Loaded XML
+     * Search - results of search 
+     * Properties - with particles chemical formula
    * 3D Model Viewer
    * Models page
 
