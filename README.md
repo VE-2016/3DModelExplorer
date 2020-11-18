@@ -1,5 +1,7 @@
 # 3D Model Explorer
 
+[![Build status](https://ci.appveyor.com/api/projects/status/q6ym9afty1nqm1qg?svg=true)](https://ci.appveyor.com/project/VE-2016/3dmodelexplorer)
+
 Program designed to fetching 3D substances formulas, loading, viewing and editing 3D views.
 
 3D formulas are retrieved from external service by REST protocol.
