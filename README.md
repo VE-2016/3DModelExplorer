@@ -36,6 +36,12 @@ Open 3dModelExplorer.sln in Visual Studio, build an run.
 
 Particle chemical formulas and 3D properties are taken by means of REST protocol from service "https://pubchem.ncbi.nlm.nih.gov"
 
+# Technology
+
+Written in WPF in .NET Framework 4.8
+3D library from https://github.com/helix-toolkit/helix-toolkit repository
+Rest client from https://github.com/restsharp/RestSharp repository
+
 # Workflows
 
 There are three main ways to explore 3D particle views.
