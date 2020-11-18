@@ -1,6 +1,7 @@
 # 3D Model Explorer
 
 [![Build status](https://ci.appveyor.com/api/projects/status/q6ym9afty1nqm1qg?svg=true)](https://ci.appveyor.com/project/VE-2016/3dmodelexplorer)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Program designed to fetching 3D substances formulas, loading, viewing and editing 3D views.
 
@@ -11,6 +12,10 @@ Program designed to fetching 3D substances formulas, loading, viewing and editin
 Retrived 3d formula are converted to .NET classes.
 
 Particles are then visualized in Helix3D library.
+
+# Requirements
+
+.NET Framework 4.8 installed
 
 # Installation and build
 
