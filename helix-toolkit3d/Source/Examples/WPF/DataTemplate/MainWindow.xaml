@@ -1,0 +1,294 @@
+<Window x:Class="Viewer3D.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:h="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf" xmlns:local="clr-namespace:Viewer3D"
+        Title="3D Model Explorer" Height="774" Width="1207"
+    Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+    <Window.Resources>
+        
+    </Window.Resources>
+    <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,0" LastChildFill="True">
+       
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_New" />
+                    <MenuItem Header="_Open" />
+                    <MenuItem Header="_Save" />
+                    <Separator />
+                    <MenuItem Header="_Exit" />
+                </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="Show Importers" x:Name="mToggleImporters"  IsChecked="True" Click="ToggleImporters_Click" />
+                <MenuItem Header="Show Models"  x:Name="mToggleModels" IsChecked="True" Click="ToggleModels_Click"/>
+                <Separator />
+                <MenuItem Header="X Grid" x:Name="mXGrid" IsChecked="True" Click="XGrid_Click" />
+                <MenuItem Header="Y Grid"  x:Name="mYGrid" IsChecked="False" Click="YGrid_Click"/>
+                <MenuItem Header="Z Grid"  x:Name="mZGrid" IsChecked="False" Click="ZGrid_Click"/>
+                <MenuItem Header="All Grids Visible"  Click="GridVisible_Click"/>
+                <MenuItem Header="All Grids Invisible"  Click="GridInvisible_Click"/>
+            </MenuItem>
+            <MenuItem Header="_Project">
+                <MenuItem Header="_New" />
+               
+                <Separator />
+                <MenuItem Header="_Exit" />
+                <Separator />
+                <MenuItem Header="_Exit" />
+            </MenuItem>
+            <MenuItem Header="_Extensions">
+                <MenuItem Header="_New" />
+                
+                <Separator />
+           
+            </MenuItem>
+            <MenuItem Header="_Help">
+                
+                <MenuItem Header="_About 3D Explorer" />
+                <Separator />
+               
+            </MenuItem>
+        </Menu>
+
+        <ToolBarTray DockPanel.Dock="Top" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+            <ToolBar  Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" ToolBar.OverflowMode="Never" ToolBarTray.IsLocked="True" Loaded="ToolBar_Loaded">
+                <Button Content="New"   PreviewMouseLeftButtonDown="Button_PreviewMouseLeftButtonDown"/>
+                <Button Content="Open"  PreviewMouseLeftButtonDown="Button_PreviewMouseLeftButtonDown_1" />
+                <Button Content="Save" PreviewMouseLeftButtonDown="Button_PreviewMouseLeftButtonDown_2" />
+            </ToolBar>
+            <ToolBar  Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" ToolBar.OverflowMode="Never" ToolBarTray.IsLocked="True" Loaded="ToolBar_Loaded">
+                <Button Content="Cut"  />
+                <Button Content="Copy" />
+                <Button Content="Paste" />
+            </ToolBar>
+        </ToolBarTray>
+        <Grid x:Name="plImporters" Margin="0,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="25" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Grid.ColumnSpan="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="*" />
+                   
+                    <ColumnDefinition Width="300" />
+                    
+                </Grid.ColumnDefinitions>
+
+                <Button Width="300" Height="20" Grid.Column="0" BorderThickness="0,0,0,0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Click="Button_PreviewMouseLeftButtonDown_3">Search</Button>
+               
+                    <TextBox  x:Name="tbSearch"    Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="1"
+                             Height="25" IsReadOnly="False" KeyDown="TextBox_KeyDown">Aspirin</TextBox>
+                    
+                <Button x:Name="btnSaveModel" Width="300" Height="20" BorderThickness="0,0,0,0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Grid.Column="2" Click="btnSaveModel_Click">Save Model As...</Button>
+                
+                
+            </Grid>
+            <TabControl TabStripPlacement="Top"  Grid.Row="1" Grid.Column="0" Background="LightGray" x:Name="tcData" HorizontalAlignment="Stretch">
+                <TabItem Header="General">
+                  
+                    <ListBox Name="lb" HorizontalContentAlignment="Stretch" >
+
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+
+                                <Grid Margin="0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="0" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Title}" Foreground="Black" />
+
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    
+                </TabItem>
+                <TabItem Header="Search..." x:Name="tpSearch">
+
+                    <ListBox Name="lb2" HorizontalContentAlignment="Stretch" Margin="0,1,0,1">
+
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+
+                                <Grid Margin="0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="300" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Title}" Foreground="Black"/>
+
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+
+                </TabItem>
+             
+                <TabItem Header="Models">
+                    <ListView x:Name="lvModels">
+                        <ListView.Resources>
+                            <DataTemplate x:Key="IconTemplate">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Grid.Column="0" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Name}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.Resources>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn CellTemplate="{StaticResource IconTemplate}" Header="Name"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding FileName}" Header="File Name"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </TabItem>
+            </TabControl>
+            
+            <GridSplitter Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="Gray"/>
+            <StackPanel Orientation="Horizontal">
+
+            </StackPanel>
+
+
+            <h:HelixViewport3D Grid.Column="2" Grid.Row="1" ZoomExtentsWhenLoaded="True" x:Name="view"  PanGesture="LeftClick" Background="Black" Margin="0,0,0,0">
+                <h:SunLight/>
+                <h:GridLinesVisual3D x:Name="xgrid" Normal="0,0,1"/>
+                <h:GridLinesVisual3D x:Name="ygrid" Normal="0,1,0" Visible="False" />
+                <h:GridLinesVisual3D x:Name="zgrid" Normal="1,0,0" Visible="False"/>
+                <!--<Viewport2DVisual3D>
+                    <Viewport2DVisual3D.Geometry>
+                        <MeshGeometry3D x:Name="FrontFaceGeometry"                            
+        Positions="-2.5,3.5,0 -2.5,-3.5,0 2.5,-3.5,0 2.5,3.5,0"
+        TextureCoordinates="0,0 0,1 1,1 1,0" 
+        TriangleIndices="0 1 2 0 2 3"/>
+                    </Viewport2DVisual3D.Geometry>
+                    <Image x:Name="vpViewPort" Height="100"/>
+                    <Viewport2DVisual3D.Material>
+                        <DiffuseMaterial Viewport2DVisual3D.IsVisualHostMaterial="True" Brush="White"/>
+                    </Viewport2DVisual3D.Material>
+                </Viewport2DVisual3D>-->
+
+              
+
+                <!--<h:GridLinesVisual3D Width="{Binding GridLength}" Length="{Binding GridLength}" MajorDistance="{Binding MajorGridLines}" Thickness="25"
+                                 MinorDistance="{Binding MajorGridLines, UpdateSourceTrigger=PropertyChanged}" LengthDirection="1,0,0" Normal="0,0,1" 
+                                 Center="{Binding BottomPlaneCenter,UpdateSourceTrigger=PropertyChanged}" Fill="DarkGray"   />
+                <h:GridLinesVisual3D Width="{Binding GridLength}" Length="{Binding GridLength, UpdateSourceTrigger=PropertyChanged}" LengthDirection="0,0,1" Normal="1,0,0"  Thickness="25"
+                                 MajorDistance="{Binding MajorGridLines}" MinorDistance="{Binding MajorGridLines}"
+                                 Center="{Binding BackLeftPlaneCenter, UpdateSourceTrigger=PropertyChanged}" Fill="LightGray" />
+                <h:GridLinesVisual3D Width="{Binding GridLength}" Length="{Binding GridLength, UpdateSourceTrigger=PropertyChanged}" LengthDirection="1,0,0" Normal="0,1,0" Thickness="25"
+                                 MajorDistance="{Binding MajorGridLines}" MinorDistance="{Binding MajorGridLines}" 
+                                 Center="{Binding BackRightPlaneCenter,UpdateSourceTrigger=PropertyChanged}" Fill="LightGray" />-->
+            </h:HelixViewport3D>
+            <GridSplitter Grid.Row="1" Grid.RowSpan="1" Grid.Column="3" Width="5" HorizontalAlignment="Stretch" Background="Gray"/>
+            <TabControl   TabStripPlacement="Top"  Grid.Row="1" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <TabItem Header="General">
+
+                    <ListBox Name="lbs" HorizontalContentAlignment="Stretch" Margin="0,0,0,0">
+
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+
+
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+
+                                <Grid Margin="0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="10" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Title}" Foreground="Black"/>
+
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                </TabItem>
+                <TabItem Header="Search..." />
+           
+                <TabItem Header="Models" x:Name="tbModels" HorizontalAlignment="Stretch">
+                    <Grid Margin="0,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" DockPanel.Dock="Top">
+                       
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="25" />
+                        </Grid.RowDefinitions>
+
+                        <Button x:Name="btnSaveAsXml" DockPanel.Dock="Top" Height="25" Click="btnSaveAsXml_Click" Grid.Row="0" >Save as .XML</Button>
+                        <ListView x:Name="lvModels2" SelectionChanged="lvModel2_SelectionChanged"  HorizontalAlignment="Stretch" Grid.Row="1">
+                            <ListView.Resources>
+                                <DataTemplate x:Key="IconTemplate">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Grid.Column="0" />
+                                        <TextBlock Grid.Column="1" Text="{Binding Name}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.Resources>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn CellTemplate="{StaticResource IconTemplate}" Header="Name"/>
+                                    <!--<GridViewColumn DisplayMemberBinding="{Binding FileName}" Header="File Name"/>-->
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                        <Button Height="25" Click="Button_Click" HorizontalAlignment="Stretch" Grid.Row="2">Load</Button>
+
+                    </Grid>
+
+                    
+
+                   
+                   
+                </TabItem>
+            </TabControl>
+            <StatusBar DockPanel.Dock="Bottom" Grid.ColumnSpan="5" Height="30" Grid.Row="2">
+                <StatusBarItem>
+                    <TextBlock Name="lblCursorPosition" />
+                </StatusBarItem>
+            </StatusBar>
+
+        </Grid>
+
+        
+    </DockPanel>
+   
+
+</Window>

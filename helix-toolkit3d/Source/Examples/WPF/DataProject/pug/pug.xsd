@@ -1,0 +1,3457 @@
+<?xml version="1.0" ?>
+<!-- ============================================
+     ::DATATOOL:: Generated from "pc_tools.asn"
+     ::DATATOOL:: by application DATATOOL version 2.12.0
+     ::DATATOOL:: on 01/22/2015 16:35:26
+     ============================================ -->
+
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:ncbi="http://www.ncbi.nlm.nih.gov"
+  xmlns="http://pubchem.ncbi.nlm.nih.gov/pug/"
+  targetNamespace="http://pubchem.ncbi.nlm.nih.gov/pug/"
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified">
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-PCTools"
+================================================= -->
+<!--
+ $Id: pc_tools.xsd 457438 2015-01-22 21:36:30Z thiessen $
+ ===========================================================================
+
+                            PUBLIC DOMAIN NOTICE
+               National Center for Biotechnology Information
+
+  This software/database is a "United States Government Work" under the
+  terms of the United States Copyright Act.  It was written as part of
+  the author's official duties as a United States Government employee and
+  thus cannot be copyrighted.  This software/database is freely available
+  to the public for use. The National Library of Medicine and the U.S.
+  Government have not placed any restriction on its use or reproduction.
+
+  Although all reasonable efforts have been taken to ensure the accuracy
+  and reliability of the software and data, the NLM and the U.S.
+  Government do not and cannot warrant the performance or results that
+  may be obtained by using this software or data. The NLM and the U.S.
+  Government disclaim all warranties, express or implied, including
+  warranties of performance, merchantability or fitness for any particular
+  purpose.
+
+  Please cite the author in any work or product based on this material.
+
+ ===========================================================================
+
+  Definitions for communication data for various PubChem tools
+
+  Note that pc_tools.dtd is generated automatically from pc_tools.asn,
+  so if you make changes to pc_tools.asn, please regenerate the DTD
+  (and check it in, in parallel with the .asn to maintain version
+  correspondence), using the command:
+
+    datatool -m pc_tools.asn -fx pc_tools.dtd
+
+  and the XML Schema version by:
+
+    datatool -m pc_tools.asn -fxs pc_tools.xsd -xmlns "http://pubchem.ncbi.nlm.nih.gov/pug/"
+
+  Please keep these data structures fairly simple, as there are many
+  subtleties of ASN.1 that are not handled by an XML DTD. In particular,
+  default values are not handled well in XML.
+
+  by NCBI Structure Group
+
+  National Center for Biotechnology Information
+  National Institutes of Health
+  Bethesda, MD 20894 USA
+
+ ===========================================================================
+-->
+
+
+<!-- {Input, Output} Top level object -->
+<xs:element name="PCT-Data">
+  <xs:complexType>
+    <xs:choice>
+<!-- incoming object (users only ever send input) -->
+      <xs:element name="PCT-Data_input">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-InputData"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- outgoing object (users only ever receive output) -->
+      <xs:element name="PCT-Data_output">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-OutputData"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} Primary input object -->
+<xs:element name="PCT-InputData">
+  <xs:complexType>
+    <xs:choice>
+<!-- request management -->
+      <xs:element name="PCT-InputData_request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Request"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- perform query -->
+      <xs:element name="PCT-InputData_query">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Query"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- download data -->
+      <xs:element name="PCT-InputData_download">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Download"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- data view -->
+      <xs:element name="PCT-InputData_view">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-View"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- chemical structure standardization -->
+      <xs:element name="PCT-InputData_standardize">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Standardize"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Output} Primary output object -->
+<xs:element name="PCT-OutputData">
+  <xs:complexType>
+    <xs:sequence>
+<!-- status of the request -->
+      <xs:element name="PCT-OutputData_status">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Status-Message"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-OutputData_output" minOccurs="0">
+        <xs:complexType>
+          <xs:choice>
+<!--
+ request handling
+ request id for new task
+-->
+            <xs:element name="PCT-OutputData_output_waiting">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-Waiting"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+<!--
+ result objects
+ output is located at provided URL
+-->
+            <xs:element name="PCT-OutputData_output_download-url">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-Download-URL"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+<!-- output is a list of ids -->
+            <xs:element name="PCT-OutputData_output_ids">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-ID-List"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+<!-- output is an Entrez history -->
+            <xs:element name="PCT-OutputData_output_entrez">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-Entrez"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+<!-- output is a chemical structure -->
+            <xs:element name="PCT-OutputData_output_structure">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-Structure"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+<!-- output is an assay description -->
+            <xs:element name="PCT-OutputData_output_assay-descr">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-Assay-Descr"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+<!-- output is a blob of data -->
+            <xs:element name="PCT-OutputData_output_data-blob">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-DataBlob"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} Manage outstanding requests -->
+<xs:element name="PCT-Request">
+  <xs:complexType>
+    <xs:sequence>
+<!-- request id to operate on -->
+      <xs:element name="PCT-Request_reqid" type="xs:string"/>
+      <xs:element name="PCT-Request_type">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+<!--
+    status	-  determine the completion status
+    cancel	-  cancel the request, if not completed
+-->
+                <xs:enumeration value="unknown"/>
+                <xs:enumeration value="status"/>
+                <xs:enumeration value="cancel"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Output} Status message of the task -->
+<xs:element name="PCT-Status-Message">
+  <xs:complexType>
+    <xs:sequence>
+<!-- task status -->
+      <xs:element name="PCT-Status-Message_status">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Status"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- message qualifying the status -->
+      <xs:element name="PCT-Status-Message_message" type="xs:string" minOccurs="0"/>
+<!-- messages qualifying the status -->
+      <xs:element name="PCT-Status-Message_messages" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="PCT-Status-Message_messages_E" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Output} Status of the task -->
+<xs:element name="PCT-Status">
+  <xs:complexType>
+    <xs:attribute name="value" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+<!--
+    success	-  task completed successfully
+    server-error	-  request completion
+         general server failure
+    hit-limit	-  success, but hit limit reached
+    time-limit	-  success, but time limit reached
+    input-error	-  input errors
+         problem with input options
+    data-error	-  problem with input data
+    stopped	-  request management status
+         request was stopped
+    running	-  request is running
+    queued	-  request is queued
+-->
+          <xs:enumeration value="unknown"/>
+          <xs:enumeration value="success"/>
+          <xs:enumeration value="server-error"/>
+          <xs:enumeration value="hit-limit"/>
+          <xs:enumeration value="time-limit"/>
+          <xs:enumeration value="input-error"/>
+          <xs:enumeration value="data-error"/>
+          <xs:enumeration value="stopped"/>
+          <xs:enumeration value="running"/>
+          <xs:enumeration value="queued"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Output} Request ID and qualifying message for new task -->
+<xs:element name="PCT-Waiting">
+  <xs:complexType>
+    <xs:sequence>
+<!-- request id, required to obtain results or status -->
+      <xs:element name="PCT-Waiting_reqid" type="xs:string"/>
+<!-- qualifying message regarding new request -->
+      <xs:element name="PCT-Waiting_message" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} Download data -->
+<xs:element name="PCT-Download">
+  <xs:complexType>
+    <xs:sequence>
+<!-- record identifiers to download -->
+      <xs:element name="PCT-Download_uids">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryUids"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-Download_format">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+<!--
+    text-asn	-  full records
+         textual ASN.1
+    binary-asn	-  binary ASN.1
+    xml	-  textual XML
+    sdf	-  SD file format, for chemical structures
+    image	-  images, format is always .zip containing multiple .png
+         full-size depiction
+    image-small	-  thumbnail depiction
+    smiles	-  selected string fields, format is: SID/CID <tab> <string>
+         Isomeric SMILES
+    inchi	-  InChI
+-->
+                <xs:enumeration value="text-asn"/>
+                <xs:enumeration value="binary-asn"/>
+                <xs:enumeration value="xml"/>
+                <xs:enumeration value="sdf"/>
+                <xs:enumeration value="image"/>
+                <xs:enumeration value="image-small"/>
+                <xs:enumeration value="smiles"/>
+                <xs:enumeration value="inchi"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+<!-- default gzip -->
+      <xs:element name="PCT-Download_compression" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+<!--
+    none	-  no compression
+    gzip	-  gzip format
+    bzip2	-  bzip2 format
+-->
+                <xs:enumeration value="none"/>
+                <xs:enumeration value="gzip"/>
+                <xs:enumeration value="bzip2"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+<!--
+ whether to retrieve 3D records (when applicable) instead of 2D
+ default false (2D)
+-->
+      <xs:element name="PCT-Download_use-3d" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+<!--
+ if 3D, return up to N conformers for each structure (if conformers are not being
+ specified directly); not all records may have this many conformers, and upper limit 
+ of N is set by the PubChem 3D system (currently 10)
+ default 1
+-->
+      <xs:element name="PCT-Download_n-3d-conformers" type="xs:integer" minOccurs="0"/>
+<!--
+ if a single UID is provided, optionally retrieve that record synchronously in the
+ response object, without going through the usual waiting cycle and URL download
+ default false
+-->
+      <xs:element name="PCT-Download_get-single-record" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Output} Results are available by using the provided URL -->
+<xs:element name="PCT-Download-URL">
+  <xs:complexType>
+    <xs:sequence>
+<!-- location of the result -->
+      <xs:element name="PCT-Download-URL_url" type="xs:string"/>
+<!-- qualifying message -->
+      <xs:element name="PCT-Download-URL_message" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input, Output} Unique identifier list -->
+<xs:element name="PCT-ID-List">
+  <xs:complexType>
+    <xs:sequence>
+<!-- id list qualifier, e.g., Entrez database name -->
+      <xs:element name="PCT-ID-List_db" type="xs:string"/>
+<!-- id list may be empty, if no hits found -->
+      <xs:element name="PCT-ID-List_uids">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="PCT-ID-List_uids_E" type="xs:integer"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} Query request -->
+<xs:element name="PCT-Query">
+  <xs:complexType>
+    <xs:sequence>
+<!-- query to be performed -->
+      <xs:element name="PCT-Query_type">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-QueryType"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- id subset to query against, entire DB used if empty -->
+      <xs:element name="PCT-Query_subset" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryUids"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-Query_options" minOccurs="0">
+        <xs:complexType>
+          <xs:choice>
+<!--
+ result id list should be inserted into this history;
+ response is PCT-OutputData.output.entrez (with new query key)
+-->
+            <xs:element name="PCT-Query_options_webenv" type="xs:string"/>
+<!-- return at most this # ids (or all if zero), as PCT-OutputData.output.ids -->
+            <xs:element name="PCT-Query_options_ids" type="xs:integer"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} Query task to perform -->
+<xs:element name="PCT-QueryType">
+  <xs:complexType>
+    <xs:choice>
+<!-- PubChem Compound chemical structure search -->
+      <xs:element name="PCT-QueryType_css">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryCompoundCS"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem Compound Entrez limits search -->
+      <xs:element name="PCT-QueryType_cel">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryCompoundEL"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem BioAssay data search -->
+      <xs:element name="PCT-QueryType_bas">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryAssayData"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem BioAssay desription retrieval -->
+      <xs:element name="PCT-QueryType_asd">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryAssayDescription"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem BioActivity Summary, BioAssay-centric -->
+      <xs:element name="PCT-QueryType_qas">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryActivitySummary"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Request a score matrix -->
+      <xs:element name="PCT-QueryType_score-matrix">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryScoreMatrix"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Link expansion (like eLink but unlimited) -->
+      <xs:element name="PCT-QueryType_e-link">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryELink"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- ID Exchange  -->
+      <xs:element name="PCT-QueryType_id-exchange">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryIDExchange"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- 3D services -->
+      <xs:element name="PCT-QueryType_pc3d">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryPC3D"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<!-- Holder for groups of Views (for internal use only) -->
+<xs:element name="PCT-Views">
+  <xs:complexType>
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="PCT-View"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} Saved state of a web-application data view -->
+<xs:element name="PCT-View">
+  <xs:complexType>
+    <xs:choice>
+<!-- PubChem BioAssay Data Table Display -->
+      <xs:element name="PCT-View_badt">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-ViewAssayDataTable"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem BioAssay Data Select Display -->
+      <xs:element name="PCT-View_bads">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-ViewAssayDataSelect"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem BioActivity Summary, BioAssay-centric -->
+      <xs:element name="PCT-View_baasa">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-ViewActivitySummaryByBioAssay"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem BioActivity Summary, Target-centric -->
+      <xs:element name="PCT-View_baast">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-ViewActivitySummaryByTarget"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem BioActivity Summary, Compound-centric -->
+      <xs:element name="PCT-View_baasc">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-ViewActivitySummaryByCompound"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem BioAssay HeatMap Display -->
+      <xs:element name="PCT-View_bahm">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-ViewAssayHeatMap"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem Compound Structure Cluster Display -->
+      <xs:element name="PCT-View_pcsc">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-ViewStructureCluster"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem BioAssay Neighbor Display -->
+      <xs:element name="PCT-View_banb">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-ViewAssayNeighbor"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem BioAssay ScatterPlot Display -->
+      <xs:element name="PCT-View_basp">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-ViewAssayScatterPlot"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem BioAssay Histogram Display -->
+      <xs:element name="PCT-View_bahg">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-ViewAssayHistogram"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem Conformer Display -->
+      <xs:element name="PCT-View_conf">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-ViewConformer"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem Conformer Alignment Display -->
+      <xs:element name="PCT-View_algn">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-ViewConformerAlignment"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input, Output} Unique identifier subset -->
+<xs:element name="PCT-QueryUids">
+  <xs:complexType>
+    <xs:choice>
+<!-- Entrez history -->
+      <xs:element name="PCT-QueryUids_entrez">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Entrez"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- UID list -->
+      <xs:element name="PCT-QueryUids_ids">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-ID-List"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Conformer identifiers -->
+      <xs:element name="PCT-QueryUids_conformer-ids">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="PCT-QueryUids_conformer-ids_E" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- IDs (registry) from a particular source -->
+      <xs:element name="PCT-QueryUids_source-ids">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-RegistryIDs"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- InChI strings (full) -->
+      <xs:element name="PCT-QueryUids_inchis">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="PCT-QueryUids_inchis_E" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- InChI keys -->
+      <xs:element name="PCT-QueryUids_inchi-keys">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="PCT-QueryUids_inchi-keys_E" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Filtered synonyms -->
+      <xs:element name="PCT-QueryUids_synonyms">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="PCT-QueryUids_synonyms_E" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="PCT-RegistryIDs">
+  <xs:complexType>
+    <xs:sequence>
+<!-- PubChem Substance Data Source Name -->
+      <xs:element name="PCT-RegistryIDs_source-name" type="xs:string"/>
+<!-- External Registry IDs -->
+      <xs:element name="PCT-RegistryIDs_source-ids">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="PCT-RegistryIDs_source-ids_E" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input, Output} Entrez (history) search description -->
+<xs:element name="PCT-Entrez">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Entrez database identifier -->
+      <xs:element name="PCT-Entrez_db" type="xs:string"/>
+<!-- Entrez history search query key -->
+      <xs:element name="PCT-Entrez_query-key" type="xs:string" minOccurs="0"/>
+<!-- Entrez history web environment -->
+      <xs:element name="PCT-Entrez_webenv" type="xs:string" minOccurs="0"/>
+<!-- Entrez history record count -->
+      <xs:element name="PCT-Entrez_count" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound chemical structure query description -->
+<xs:element name="PCT-QueryCompoundCS">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-QueryCompoundCS_query">
+        <xs:complexType>
+          <xs:choice>
+<!-- query is a file -->
+            <xs:element name="PCT-QueryCompoundCS_query_file" type="xs:hexBinary"/>
+<!-- query is a string -->
+            <xs:element name="PCT-QueryCompoundCS_query_data" type="xs:string"/>
+<!-- multiple queries as strings, one per line -->
+            <xs:element name="PCT-QueryCompoundCS_query_multi">
+              <xs:complexType>
+                <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                  <xs:element name="PCT-QueryCompoundCS_query_multi_E" type="xs:string"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryCompoundCS_type">
+        <xs:complexType>
+          <xs:choice>
+<!-- structure identity query -->
+            <xs:element name="PCT-QueryCompoundCS_type_identical">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-CSIdentity"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+<!-- substructure query -->
+            <xs:element name="PCT-QueryCompoundCS_type_subss">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-CSStructure"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+<!-- superstructure query -->
+            <xs:element name="PCT-QueryCompoundCS_type_supss">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-CSStructure"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+<!-- similarity search query -->
+            <xs:element name="PCT-QueryCompoundCS_type_similar">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-CSSimilarity"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+<!-- molecular formula query -->
+            <xs:element name="PCT-QueryCompoundCS_type_formula">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-CSMolFormula"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+<!-- 3d conformer query -->
+            <xs:element name="PCT-QueryCompoundCS_type_conformer">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-SimilarConformer"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+<!-- time limit (in CPU seconds) -->
+      <xs:element name="PCT-QueryCompoundCS_time" type="xs:integer" minOccurs="0"/>
+<!-- hit limit count -->
+      <xs:element name="PCT-QueryCompoundCS_results" type="xs:integer" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound chemical structure identity search options -->
+<xs:element name="PCT-CSIdentity">
+  <xs:complexType>
+    <xs:simpleContent>
+      <xs:extension base="xs:integer">
+        <xs:attribute name="value" use="optional">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+<!--
+    same-connectivity	-  must have same connectivity
+    any-tautomer	-  can be a tautomer of query, ignores stereo and isotopic substitution
+    same-stereo	-  must have same connectivity and stereo
+    same-isotope	-  must have same connectivity and isotopic substitutions
+    same-stereo-isotope	-  must have same connectivity, stereo, and isotopic substitutions
+    same-nonconflict-stereo	-  must have same connectivity and non-conflicting stereo
+    same-isotope-nonconflict-stereo	-  must have same connectivity, isotopic substitutions and non-conflicting stereo
+-->
+              <xs:enumeration value="undefined" ncbi:intvalue="0"/>
+              <xs:enumeration value="same-connectivity" ncbi:intvalue="1"/>
+              <xs:enumeration value="any-tautomer" ncbi:intvalue="2"/>
+              <xs:enumeration value="same-stereo" ncbi:intvalue="3"/>
+              <xs:enumeration value="same-isotope" ncbi:intvalue="4"/>
+              <xs:enumeration value="same-stereo-isotope" ncbi:intvalue="5"/>
+              <xs:enumeration value="same-nonconflict-stereo" ncbi:intvalue="6"/>
+              <xs:enumeration value="same-isotope-nonconflict-stereo" ncbi:intvalue="7"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound chemical structure molecular formula search options -->
+<xs:element name="PCT-CSMolFormula">
+  <xs:complexType>
+    <xs:sequence>
+<!-- are elements not specified allowed to be present in the result -->
+      <xs:element name="PCT-CSMolFormula_allow-other" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound chemical structure similarity search options -->
+<xs:element name="PCT-CSSimilarity">
+  <xs:complexType>
+    <xs:sequence>
+<!-- similarity search Tanimoto threshold -->
+      <xs:element name="PCT-CSSimilarity_threshold" type="xs:integer"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} 3d conformer query for similar conformers in PC Compound -->
+<xs:element name="PCT-SimilarConformer">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-SimilarConformer_sort" minOccurs="0">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    input-order	-  no ordering of results (default)
+    shape-then-feature	-  descending order of shape similarity then feature similarity
+    feature-then-shape	-  descending order of feature similarity then shape similarity
+    shape-and-feature	-  descending order of combined shape and feature similarity
+    numerical-id-order	-  ascending numeric ordering of conformer IDs
+-->
+                    <xs:enumeration value="input-order" ncbi:intvalue="0"/>
+                    <xs:enumeration value="shape-then-feature" ncbi:intvalue="1"/>
+                    <xs:enumeration value="feature-then-shape" ncbi:intvalue="2"/>
+                    <xs:enumeration value="shape-and-feature" ncbi:intvalue="3"/>
+                    <xs:enumeration value="numerical-id-order" ncbi:intvalue="4"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-SimilarConformer_output">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    display	-  result is an URL to display results in PC3D web-viewer
+    sdf	-  result is an FTP URL to SDF text file
+    asn	-  result is an FTP URL to ASN.1 binary file
+    xml	-  result is an FTP URL to XML text file
+    csv	-  result is an FTP URL to CSV text file
+    entrez	-  result is an Entrez webenv
+-->
+                    <xs:enumeration value="display" ncbi:intvalue="1"/>
+                    <xs:enumeration value="sdf" ncbi:intvalue="2"/>
+                    <xs:enumeration value="asn" ncbi:intvalue="3"/>
+                    <xs:enumeration value="xml" ncbi:intvalue="4"/>
+                    <xs:enumeration value="csv" ncbi:intvalue="5"/>
+                    <xs:enumeration value="entrez" ncbi:intvalue="6"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound chemical structure substructure and superstructure search options -->
+<xs:element name="PCT-CSStructure">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-CSStructure_stereo" minOccurs="0">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    ignore	-  ignore stereochemistry (default, if not specified)
+    exact	-  match exact stereochemistry
+    relative	-  match relative stereochemistry
+    non-conflicting	-  match specified or non-specific stereo exactly
+-->
+                    <xs:enumeration value="ignore" ncbi:intvalue="0"/>
+                    <xs:enumeration value="exact" ncbi:intvalue="1"/>
+                    <xs:enumeration value="relative" ncbi:intvalue="2"/>
+                    <xs:enumeration value="non-conflicting" ncbi:intvalue="3"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+<!-- match isotopes           (default false) -->
+      <xs:element name="PCT-CSStructure_isotopes" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+<!-- match charges            (default false) -->
+      <xs:element name="PCT-CSStructure_charges" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+<!-- match tautomers          (default false) -->
+      <xs:element name="PCT-CSStructure_tautomers" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+<!-- ringsystems not embedded (default false) -->
+      <xs:element name="PCT-CSStructure_rings" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+<!-- singe/double bonds match (default true) -->
+      <xs:element name="PCT-CSStructure_bonds" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+<!-- chain bonds match rings  (default true) -->
+      <xs:element name="PCT-CSStructure_chains" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+<!-- strip hydrogens          (default false) -->
+      <xs:element name="PCT-CSStructure_hydrogen" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound Entrez limits page query -->
+<xs:element name="PCT-QueryCompoundEL">
+  <xs:complexType>
+    <xs:choice>
+<!-- PubChem Compound Entrez limits by property -->
+      <xs:element name="PCT-QueryCompoundEL_property">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-CLByProperty"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem Compound Entrez limits by chemical element -->
+      <xs:element name="PCT-QueryCompoundEL_element">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-CLByChemicalElement"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem Compound Entrez limits by atom chiral centers -->
+      <xs:element name="PCT-QueryCompoundEL_atomstereo">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-CLByStereo"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem Compound Entrez limits by E/Z bond isomers -->
+      <xs:element name="PCT-QueryCompoundEL_bondstereo">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-CLByStereo"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem Compound Entrez limits by biological activity -->
+      <xs:element name="PCT-QueryCompoundEL_activity">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-CLByBioActivity"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem Compound Entrez limits by entrez links -->
+      <xs:element name="PCT-QueryCompoundEL_links">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-CLByLinks"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem Compound Entrez limits by depositor category -->
+      <xs:element name="PCT-QueryCompoundEL_category">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-CLByString"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- PubChem Compound Entrez limits by data source -->
+      <xs:element name="PCT-QueryCompoundEL_source">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-CLByString"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound Entrez Limits Search -->
+<xs:element name="PCT-CLByProperty">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-CLByProperty_type">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    mw	-  Molecular Weight                 (FLOAT)
+    xlogp	-  xLogP                            (FLOAT)
+    hbd	-  Count of Hydrogen Bond Donors    (INTGER)
+    hba	-  Count of Hydrogen Bond Acceptors (INTEGER)
+    rb	-  Count of Rotatable Bonds         (INTEGER)
+    tpsa	-  Topological Polar Surface Area   (FLOAT)
+    ha	-  Count of Heavy Atoms             (INTEGER)
+    isotope	-  Count of Specified Isotopes      (INTEGER)
+    tautomer	-  Count of Tautomers               (INTEGER)
+    cu	-  Count of Covalent Units          (INTEGER)
+    complexity	-  Structure Complexity             (FLOAT)
+    charge	-  Formal Charge                    (INTGER)
+-->
+                    <xs:enumeration value="mw" ncbi:intvalue="1"/>
+                    <xs:enumeration value="xlogp" ncbi:intvalue="2"/>
+                    <xs:enumeration value="hbd" ncbi:intvalue="3"/>
+                    <xs:enumeration value="hba" ncbi:intvalue="4"/>
+                    <xs:enumeration value="rb" ncbi:intvalue="5"/>
+                    <xs:enumeration value="tpsa" ncbi:intvalue="6"/>
+                    <xs:enumeration value="ha" ncbi:intvalue="7"/>
+                    <xs:enumeration value="isotope" ncbi:intvalue="8"/>
+                    <xs:enumeration value="tautomer" ncbi:intvalue="9"/>
+                    <xs:enumeration value="cu" ncbi:intvalue="10"/>
+                    <xs:enumeration value="complexity" ncbi:intvalue="11"/>
+                    <xs:enumeration value="charge" ncbi:intvalue="12"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-CLByProperty_range">
+        <xs:complexType>
+          <xs:choice>
+<!-- Floating Point Range Specification -->
+            <xs:element name="PCT-CLByProperty_range_frange">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-CLFloatRange"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+<!-- Integer Point Range Specification -->
+            <xs:element name="PCT-CLByProperty_range_irange">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-CLIntegerRange"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound Entrez Limits Floating Point Search Range -->
+<xs:element name="PCT-CLFloatRange">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Lower bound of the search range -->
+      <xs:element name="PCT-CLFloatRange_lower" type="xs:double"/>
+<!-- Upper bound of the search range -->
+      <xs:element name="PCT-CLFloatRange_upper" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound Entrez Limits Floating Point Search Range -->
+<xs:element name="PCT-CLIntegerRange">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Lower bound of the search range -->
+      <xs:element name="PCT-CLIntegerRange_lower" type="xs:integer"/>
+<!-- Upper bound of the search range -->
+      <xs:element name="PCT-CLIntegerRange_upper" type="xs:integer"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound Entrez Limits Search by Chemical Element -->
+<xs:element name="PCT-CLByChemicalElement">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-CLByChemicalElement_qualifier">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    must	-  Structure must contain
+    must-not	-  Structure must not contain
+-->
+                    <xs:enumeration value="must" ncbi:intvalue="1"/>
+                    <xs:enumeration value="must-not" ncbi:intvalue="2"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+<!-- Chemical Element -->
+      <xs:element name="PCT-CLByChemicalElement_element">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Element"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} Elements -->
+<xs:element name="PCT-Element">
+  <xs:complexType>
+    <xs:simpleContent>
+      <xs:extension base="xs:integer">
+        <xs:attribute name="value" use="optional">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="h" ncbi:intvalue="1"/>
+              <xs:enumeration value="he" ncbi:intvalue="2"/>
+              <xs:enumeration value="li" ncbi:intvalue="3"/>
+              <xs:enumeration value="be" ncbi:intvalue="4"/>
+              <xs:enumeration value="b" ncbi:intvalue="5"/>
+              <xs:enumeration value="c" ncbi:intvalue="6"/>
+              <xs:enumeration value="n" ncbi:intvalue="7"/>
+              <xs:enumeration value="o" ncbi:intvalue="8"/>
+              <xs:enumeration value="f" ncbi:intvalue="9"/>
+              <xs:enumeration value="ne" ncbi:intvalue="10"/>
+              <xs:enumeration value="na" ncbi:intvalue="11"/>
+              <xs:enumeration value="mg" ncbi:intvalue="12"/>
+              <xs:enumeration value="al" ncbi:intvalue="13"/>
+              <xs:enumeration value="si" ncbi:intvalue="14"/>
+              <xs:enumeration value="p" ncbi:intvalue="15"/>
+              <xs:enumeration value="s" ncbi:intvalue="16"/>
+              <xs:enumeration value="cl" ncbi:intvalue="17"/>
+              <xs:enumeration value="ar" ncbi:intvalue="18"/>
+              <xs:enumeration value="k" ncbi:intvalue="19"/>
+              <xs:enumeration value="ca" ncbi:intvalue="20"/>
+              <xs:enumeration value="sc" ncbi:intvalue="21"/>
+              <xs:enumeration value="ti" ncbi:intvalue="22"/>
+              <xs:enumeration value="v" ncbi:intvalue="23"/>
+              <xs:enumeration value="cr" ncbi:intvalue="24"/>
+              <xs:enumeration value="mn" ncbi:intvalue="25"/>
+              <xs:enumeration value="fe" ncbi:intvalue="26"/>
+              <xs:enumeration value="co" ncbi:intvalue="27"/>
+              <xs:enumeration value="ni" ncbi:intvalue="28"/>
+              <xs:enumeration value="cu" ncbi:intvalue="29"/>
+              <xs:enumeration value="zn" ncbi:intvalue="30"/>
+              <xs:enumeration value="ga" ncbi:intvalue="31"/>
+              <xs:enumeration value="ge" ncbi:intvalue="32"/>
+              <xs:enumeration value="as" ncbi:intvalue="33"/>
+              <xs:enumeration value="se" ncbi:intvalue="34"/>
+              <xs:enumeration value="br" ncbi:intvalue="35"/>
+              <xs:enumeration value="kr" ncbi:intvalue="36"/>
+              <xs:enumeration value="rb" ncbi:intvalue="37"/>
+              <xs:enumeration value="sr" ncbi:intvalue="38"/>
+              <xs:enumeration value="y" ncbi:intvalue="39"/>
+              <xs:enumeration value="zr" ncbi:intvalue="40"/>
+              <xs:enumeration value="nb" ncbi:intvalue="41"/>
+              <xs:enumeration value="mo" ncbi:intvalue="42"/>
+              <xs:enumeration value="tc" ncbi:intvalue="43"/>
+              <xs:enumeration value="ru" ncbi:intvalue="44"/>
+              <xs:enumeration value="rh" ncbi:intvalue="45"/>
+              <xs:enumeration value="pd" ncbi:intvalue="46"/>
+              <xs:enumeration value="ag" ncbi:intvalue="47"/>
+              <xs:enumeration value="cd" ncbi:intvalue="48"/>
+              <xs:enumeration value="in" ncbi:intvalue="49"/>
+              <xs:enumeration value="sn" ncbi:intvalue="50"/>
+              <xs:enumeration value="sb" ncbi:intvalue="51"/>
+              <xs:enumeration value="te" ncbi:intvalue="52"/>
+              <xs:enumeration value="i" ncbi:intvalue="53"/>
+              <xs:enumeration value="xe" ncbi:intvalue="54"/>
+              <xs:enumeration value="cs" ncbi:intvalue="55"/>
+              <xs:enumeration value="ba" ncbi:intvalue="56"/>
+              <xs:enumeration value="la" ncbi:intvalue="57"/>
+              <xs:enumeration value="ce" ncbi:intvalue="58"/>
+              <xs:enumeration value="pr" ncbi:intvalue="59"/>
+              <xs:enumeration value="nd" ncbi:intvalue="60"/>
+              <xs:enumeration value="pm" ncbi:intvalue="61"/>
+              <xs:enumeration value="sm" ncbi:intvalue="62"/>
+              <xs:enumeration value="eu" ncbi:intvalue="63"/>
+              <xs:enumeration value="gd" ncbi:intvalue="64"/>
+              <xs:enumeration value="tb" ncbi:intvalue="65"/>
+              <xs:enumeration value="dy" ncbi:intvalue="66"/>
+              <xs:enumeration value="ho" ncbi:intvalue="67"/>
+              <xs:enumeration value="er" ncbi:intvalue="68"/>
+              <xs:enumeration value="tm" ncbi:intvalue="69"/>
+              <xs:enumeration value="yb" ncbi:intvalue="70"/>
+              <xs:enumeration value="lu" ncbi:intvalue="71"/>
+              <xs:enumeration value="hf" ncbi:intvalue="72"/>
+              <xs:enumeration value="ta" ncbi:intvalue="73"/>
+              <xs:enumeration value="w" ncbi:intvalue="74"/>
+              <xs:enumeration value="re" ncbi:intvalue="75"/>
+              <xs:enumeration value="os" ncbi:intvalue="76"/>
+              <xs:enumeration value="ir" ncbi:intvalue="77"/>
+              <xs:enumeration value="pt" ncbi:intvalue="78"/>
+              <xs:enumeration value="au" ncbi:intvalue="79"/>
+              <xs:enumeration value="hg" ncbi:intvalue="80"/>
+              <xs:enumeration value="tl" ncbi:intvalue="81"/>
+              <xs:enumeration value="pb" ncbi:intvalue="82"/>
+              <xs:enumeration value="bi" ncbi:intvalue="83"/>
+              <xs:enumeration value="po" ncbi:intvalue="84"/>
+              <xs:enumeration value="at" ncbi:intvalue="85"/>
+              <xs:enumeration value="rn" ncbi:intvalue="86"/>
+              <xs:enumeration value="fr" ncbi:intvalue="87"/>
+              <xs:enumeration value="ra" ncbi:intvalue="88"/>
+              <xs:enumeration value="ac" ncbi:intvalue="89"/>
+              <xs:enumeration value="th" ncbi:intvalue="90"/>
+              <xs:enumeration value="pa" ncbi:intvalue="91"/>
+              <xs:enumeration value="u" ncbi:intvalue="92"/>
+              <xs:enumeration value="np" ncbi:intvalue="93"/>
+              <xs:enumeration value="pu" ncbi:intvalue="94"/>
+              <xs:enumeration value="am" ncbi:intvalue="95"/>
+              <xs:enumeration value="cm" ncbi:intvalue="96"/>
+              <xs:enumeration value="bk" ncbi:intvalue="97"/>
+              <xs:enumeration value="cf" ncbi:intvalue="98"/>
+              <xs:enumeration value="es" ncbi:intvalue="99"/>
+              <xs:enumeration value="fm" ncbi:intvalue="100"/>
+              <xs:enumeration value="md" ncbi:intvalue="101"/>
+              <xs:enumeration value="no" ncbi:intvalue="102"/>
+              <xs:enumeration value="lr" ncbi:intvalue="103"/>
+              <xs:enumeration value="rf" ncbi:intvalue="104"/>
+              <xs:enumeration value="db" ncbi:intvalue="105"/>
+              <xs:enumeration value="sg" ncbi:intvalue="106"/>
+              <xs:enumeration value="bh" ncbi:intvalue="107"/>
+              <xs:enumeration value="hs" ncbi:intvalue="108"/>
+              <xs:enumeration value="mt" ncbi:intvalue="109"/>
+              <xs:enumeration value="ds" ncbi:intvalue="110"/>
+              <xs:enumeration value="rg" ncbi:intvalue="111"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound Entrez Limits Search by StereoChemistry -->
+<xs:element name="PCT-CLByStereo">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-CLByStereo_qualifier">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    must	-  Structure must contain
+    must-not	-  Structure must not contain
+-->
+                    <xs:enumeration value="must" ncbi:intvalue="1"/>
+                    <xs:enumeration value="must-not" ncbi:intvalue="2"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-CLByStereo_contain">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    fully-specified	-  Structure contains fully-specified stereo
+    partially-specified	-  Structure contains partially-specified stereo
+    fully-unspecified	-  Structure contains fully-unspecified stereo
+-->
+                    <xs:enumeration value="fully-specified" ncbi:intvalue="1"/>
+                    <xs:enumeration value="partially-specified" ncbi:intvalue="2"/>
+                    <xs:enumeration value="fully-unspecified" ncbi:intvalue="3"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound Entrez Limits Search -->
+<xs:element name="PCT-CLByBioActivity">
+  <xs:complexType>
+    <xs:simpleContent>
+      <xs:extension base="xs:integer">
+        <xs:attribute name="value" use="optional">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="not-tested" ncbi:intvalue="0"/>
+              <xs:enumeration value="tested" ncbi:intvalue="1"/>
+              <xs:enumeration value="active" ncbi:intvalue="2"/>
+              <xs:enumeration value="inactive" ncbi:intvalue="3"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound Entrez Limits Search -->
+<xs:element name="PCT-CLByLinks">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-CLByLinks_qualifier">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    must	-  Structure must have
+    must-not	-  Structure must not have
+-->
+                    <xs:enumeration value="must" ncbi:intvalue="1"/>
+                    <xs:enumeration value="must-not" ncbi:intvalue="2"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-CLByLinks_db">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    pubmed	-  Link to PubMed Entrez DB
+    protein	-  Link to Protein Entrez DB
+    mesh	-  Link to MeSH Entrez DB
+    pubmed-via-mesh	-  Link to PubMed-via-MeSH
+    nucleotide	-  Link to Nucleotide Entrez DB
+    protein-3d-structure	-  Link to MMDB Entrez DB
+    pharmacological-action	-  Link to MeSH Pharmacological Action
+-->
+                    <xs:enumeration value="pubmed" ncbi:intvalue="1"/>
+                    <xs:enumeration value="protein" ncbi:intvalue="2"/>
+                    <xs:enumeration value="mesh" ncbi:intvalue="3"/>
+                    <xs:enumeration value="pubmed-via-mesh" ncbi:intvalue="4"/>
+                    <xs:enumeration value="nucleotide" ncbi:intvalue="5"/>
+                    <xs:enumeration value="protein-3d-structure" ncbi:intvalue="6"/>
+                    <xs:enumeration value="pharmacological-action" ncbi:intvalue="7"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound Entrez Limits Search by String -->
+<xs:element name="PCT-CLByString">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-CLByString_qualifier">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    must	-  Structure must have
+    must-not	-  Structure must not have
+-->
+                    <xs:enumeration value="must" ncbi:intvalue="1"/>
+                    <xs:enumeration value="must-not" ncbi:intvalue="2"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-CLByString_category" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay Data Query -->
+<xs:element name="PCT-QueryAssayData">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-QueryAssayData_output">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    assay-xml	-  XML format using PubChem BioAssay data specification
+    assay-text-asn	-  text ASN.1 format using PubChem BioAssay data specification
+    assay-binary-asn	-  binary ASN.1 format using PubChem BioAssay data specification
+    csv	-  CSV data format
+-->
+                    <xs:enumeration value="assay-xml" ncbi:intvalue="1"/>
+                    <xs:enumeration value="assay-text-asn" ncbi:intvalue="2"/>
+                    <xs:enumeration value="assay-binary-asn" ncbi:intvalue="3"/>
+                    <xs:enumeration value="csv" ncbi:intvalue="4"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+<!-- AIDs to retrieve -->
+      <xs:element name="PCT-QueryAssayData_aids">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryUids"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Restrict rows to these SIDs or CIDs -->
+      <xs:element name="PCT-QueryAssayData_scids" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryUids"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryAssayData_dataset" minOccurs="0">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    complete	-  detail view
+    concise	-  summary view
+-->
+                    <xs:enumeration value="complete" ncbi:intvalue="0"/>
+                    <xs:enumeration value="concise" ncbi:intvalue="1"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+<!-- Query/restrict bioassay readouts -->
+      <xs:element name="PCT-QueryAssayData_readouts" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-Readout"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Data focus options -->
+      <xs:element name="PCT-QueryAssayData_focus" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-FocusOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- default gzip -->
+      <xs:element name="PCT-QueryAssayData_compression" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+<!--
+    none	-  no compression
+    gzip	-  gzip (.gz) format
+    bzip2	-  bzip2 (.bz2) format
+-->
+                <xs:enumeration value="none"/>
+                <xs:enumeration value="gzip"/>
+                <xs:enumeration value="bzip2"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Activity Summary Query -->
+<xs:element name="PCT-QueryActivitySummary">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-QueryActivitySummary_output">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    summary-table	-  Summary table in CSV data format
+-->
+                    <xs:enumeration value="summary-table" ncbi:intvalue="0"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryActivitySummary_type">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    assay-central	-  Each row of the table shows one assay  
+-->
+                    <xs:enumeration value="assay-central" ncbi:intvalue="0"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+<!--
+ BioActivity Summary can start from a list of aids,
+   a list of cids/sids, or a combination of both
+-->
+      <xs:element name="PCT-QueryActivitySummary_aids" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryUids"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- A list of compound IDs or substance IDs -->
+      <xs:element name="PCT-QueryActivitySummary_scids" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryUids"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Data focus options -->
+      <xs:element name="PCT-QueryActivitySummary_focus" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-FocusOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- default gzip -->
+      <xs:element name="PCT-QueryActivitySummary_compression" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+<!--
+    none	-  no compression
+    gzip	-  gzip (.gz) format
+    bzip2	-  bzip2 (.bz2) format
+-->
+                <xs:enumeration value="none"/>
+                <xs:enumeration value="gzip"/>
+                <xs:enumeration value="bzip2"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay Data Table Display -->
+<xs:element name="PCT-ViewAssayDataTable">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Identifiers (AID/SID/CID) considered -->
+      <xs:element name="PCT-ViewAssayDataTable_id">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-ID-List"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-ViewAssayDataTable_dataset" minOccurs="0">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    complete	-  detail view
+    concise	-  summary view
+-->
+                    <xs:enumeration value="complete" ncbi:intvalue="0"/>
+                    <xs:enumeration value="concise" ncbi:intvalue="1"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+<!-- Query/restrict bioassay readouts -->
+      <xs:element name="PCT-ViewAssayDataTable_readouts" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-Readout"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Data focus options -->
+      <xs:element name="PCT-ViewAssayDataTable_focus" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-FocusOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Other options -->
+      <xs:element name="PCT-ViewAssayDataTable_other" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-OtherOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Originator URL of View       (where to replay) -->
+      <xs:element name="PCT-ViewAssayDataTable_url" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay Data Select Display -->
+<xs:element name="PCT-ViewAssayDataSelect">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Identifiers (AID/SID/CID) considered -->
+      <xs:element name="PCT-ViewAssayDataSelect_id">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-ID-List"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Query/restrict bioassay readouts -->
+      <xs:element name="PCT-ViewAssayDataSelect_readouts" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-Readout"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Data focus options -->
+      <xs:element name="PCT-ViewAssayDataSelect_focus" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-FocusOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Other options -->
+      <xs:element name="PCT-ViewAssayDataSelect_other" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-OtherOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Originator URL of View       (where to replay) -->
+      <xs:element name="PCT-ViewAssayDataSelect_url" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioActivity Summary, BioAssay-centric -->
+<xs:element name="PCT-ViewActivitySummaryByBioAssay">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Identifiers (AID/SID/CID) considered -->
+      <xs:element name="PCT-ViewActivitySummaryByBioAssay_id">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-ID-List"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Data focus options -->
+      <xs:element name="PCT-ViewActivitySummaryByBioAssay_focus" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-FocusOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Other options -->
+      <xs:element name="PCT-ViewActivitySummaryByBioAssay_other" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-OtherOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Originator URL of View       (where to replay) -->
+      <xs:element name="PCT-ViewActivitySummaryByBioAssay_url" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioActivity Summary, Target-centric -->
+<xs:element name="PCT-ViewActivitySummaryByTarget">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Identifiers (AID/SID/CID) considered -->
+      <xs:element name="PCT-ViewActivitySummaryByTarget_id">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-ID-List"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Data focus options -->
+      <xs:element name="PCT-ViewActivitySummaryByTarget_focus" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-FocusOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Other options -->
+      <xs:element name="PCT-ViewActivitySummaryByTarget_other" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-OtherOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Originator URL of View       (where to replay) -->
+      <xs:element name="PCT-ViewActivitySummaryByTarget_url" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioActivity Summary, Compound-centric -->
+<xs:element name="PCT-ViewActivitySummaryByCompound">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Identifiers (AID/SID/CID) considered -->
+      <xs:element name="PCT-ViewActivitySummaryByCompound_id">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-ID-List"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Data focus options -->
+      <xs:element name="PCT-ViewActivitySummaryByCompound_focus" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-FocusOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Other options -->
+      <xs:element name="PCT-ViewActivitySummaryByCompound_other" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-OtherOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Originator URL of View       (where to replay) -->
+      <xs:element name="PCT-ViewActivitySummaryByCompound_url" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay HeatMap Display -->
+<xs:element name="PCT-ViewAssayHeatMap">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Identifiers (AID/SID/CID) considered -->
+      <xs:element name="PCT-ViewAssayHeatMap_id">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-ID-List"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Data focus options -->
+      <xs:element name="PCT-ViewAssayHeatMap_focus" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-FocusOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Other Options -->
+      <xs:element name="PCT-ViewAssayHeatMap_other" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-OtherOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Originator URL of View       (where to replay) -->
+      <xs:element name="PCT-ViewAssayHeatMap_url" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound Structure Cluster Display -->
+<xs:element name="PCT-ViewStructureCluster">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Identifiers (CID) considered -->
+      <xs:element name="PCT-ViewStructureCluster_id">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-ID-List"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Data focus options -->
+      <xs:element name="PCT-ViewStructureCluster_focus" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-FocusOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Other Options -->
+      <xs:element name="PCT-ViewStructureCluster_other" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-OtherOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Originator URL of View       (where to replay) -->
+      <xs:element name="PCT-ViewStructureCluster_url" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay Neighbor Display -->
+<xs:element name="PCT-ViewAssayNeighbor">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Identifiers (AID/SID/CID) considered -->
+      <xs:element name="PCT-ViewAssayNeighbor_id">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-ID-List"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Data focus options -->
+      <xs:element name="PCT-ViewAssayNeighbor_focus" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-FocusOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Other Options -->
+      <xs:element name="PCT-ViewAssayNeighbor_other" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-OtherOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Originator URL of View       (where to replay) -->
+      <xs:element name="PCT-ViewAssayNeighbor_url" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay ScatterPlot Display -->
+<xs:element name="PCT-ViewAssayScatterPlot">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Identifiers (AID/SID/CID) considered -->
+      <xs:element name="PCT-ViewAssayScatterPlot_id">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-ID-List"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Data focus options -->
+      <xs:element name="PCT-ViewAssayScatterPlot_focus" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-FocusOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Other Options -->
+      <xs:element name="PCT-ViewAssayScatterPlot_other" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-OtherOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Originator URL of View       (where to replay) -->
+      <xs:element name="PCT-ViewAssayScatterPlot_url" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay Histogram Display -->
+<xs:element name="PCT-ViewAssayHistogram">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Identifiers (AID/SID/CID) considered -->
+      <xs:element name="PCT-ViewAssayHistogram_id">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-ID-List"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Data focus options -->
+      <xs:element name="PCT-ViewAssayHistogram_focus" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-FocusOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Other Options -->
+      <xs:element name="PCT-ViewAssayHistogram_other" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-OtherOption"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Originator URL of View       (where to replay) -->
+      <xs:element name="PCT-ViewAssayHistogram_url" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay Display and Filtering by Readout -->
+<xs:element name="PCT-Assay-Readout">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Assay Identifier -->
+      <xs:element name="PCT-Assay-Readout_aid" type="xs:integer"/>
+<!-- Assay Version              (defaults to current) -->
+      <xs:element name="PCT-Assay-Readout_version" type="xs:integer" minOccurs="0"/>
+<!-- Assay Revision             (defaults to current) -->
+      <xs:element name="PCT-Assay-Readout_revision" type="xs:integer" minOccurs="0"/>
+<!-- Assay Data Readouts (TIDs) (defaults to all data) -->
+      <xs:element name="PCT-Assay-Readout_retrieve" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="PCT-Assay-Readout_retrieve_E" type="xs:integer"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Filter Assay Data by Readout -->
+      <xs:element name="PCT-Assay-Readout_query" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-Readout-Query"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-Assay-Readout_result-version" minOccurs="0">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    current	-  Current Assay Test Result                 (default, if not specified)
+    allversion	-  All Assay Result Versions         (only for single assay search/view)
+-->
+                    <xs:enumeration value="current" ncbi:intvalue="0"/>
+                    <xs:enumeration value="allversion" ncbi:intvalue="1"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay Readout Query (restricts assay data) -->
+<xs:element name="PCT-Assay-Readout-Query">
+  <xs:complexType>
+    <xs:choice>
+<!-- Filter data by integer readout -->
+      <xs:element name="PCT-Assay-Readout-Query_iquery">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-Readout-Integer-Query"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Filter data by floating-point readout -->
+      <xs:element name="PCT-Assay-Readout-Query_fquery">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-Readout-Float-Query"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Filter data by string readout -->
+      <xs:element name="PCT-Assay-Readout-Query_squery">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-Readout-String-Query"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Filter data by boolean readout -->
+      <xs:element name="PCT-Assay-Readout-Query_bquery">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-Readout-Boolean-Query"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Filter data by activity score -->
+      <xs:element name="PCT-Assay-Readout-Query_score">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-Activity-Score-Query"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Filter data by activity outcome -->
+      <xs:element name="PCT-Assay-Readout-Query_outcome">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Assay-Activity-Outcome-Query"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay Integer Readout Query -->
+<xs:element name="PCT-Assay-Readout-Integer-Query">
+  <xs:complexType>
+    <xs:sequence>
+<!-- assay readout identifier -->
+      <xs:element name="PCT-Assay-Readout-Integer-Query_tid" type="xs:integer"/>
+<!--
+ either lower or upper or both must be specified
+ lower bound of range query
+-->
+      <xs:element name="PCT-Assay-Readout-Integer-Query_lower" type="xs:integer" minOccurs="0"/>
+<!-- upper bound of range query -->
+      <xs:element name="PCT-Assay-Readout-Integer-Query_upper" type="xs:integer" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay Floating-point Readout Query -->
+<xs:element name="PCT-Assay-Readout-Float-Query">
+  <xs:complexType>
+    <xs:sequence>
+<!-- assay readout identifier -->
+      <xs:element name="PCT-Assay-Readout-Float-Query_tid" type="xs:integer"/>
+<!--
+ either lower or upper or both must be specified
+ lower bound of range query
+-->
+      <xs:element name="PCT-Assay-Readout-Float-Query_lower" type="xs:double" minOccurs="0"/>
+<!-- upper bound of range query -->
+      <xs:element name="PCT-Assay-Readout-Float-Query_upper" type="xs:double" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay String-based Readout Query -->
+<xs:element name="PCT-Assay-Readout-String-Query">
+  <xs:complexType>
+    <xs:sequence>
+<!-- assay readout identifier -->
+      <xs:element name="PCT-Assay-Readout-String-Query_tid" type="xs:integer"/>
+      <xs:element name="PCT-Assay-Readout-String-Query_match">
+        <xs:complexType>
+          <xs:choice>
+<!-- Readout value must contain string -->
+            <xs:element name="PCT-Assay-Readout-String-Query_match_pattern" type="xs:string"/>
+<!-- Readout value must exactly match string -->
+            <xs:element name="PCT-Assay-Readout-String-Query_match_exact" type="xs:string"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay Boolean Readout Query -->
+<xs:element name="PCT-Assay-Readout-Boolean-Query">
+  <xs:complexType>
+    <xs:sequence>
+<!-- assay readout identifier -->
+      <xs:element name="PCT-Assay-Readout-Boolean-Query_tid" type="xs:integer"/>
+<!-- desired boolean value -->
+      <xs:element name="PCT-Assay-Readout-Boolean-Query_bvalue">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay Activity Score Query -->
+<xs:element name="PCT-Assay-Activity-Score-Query">
+  <xs:complexType>
+    <xs:sequence>
+<!--
+ either lower or upper or both must be specified
+ lower bound of range query
+-->
+      <xs:element name="PCT-Assay-Activity-Score-Query_lower" type="xs:double" minOccurs="0"/>
+<!-- upper bound of range query -->
+      <xs:element name="PCT-Assay-Activity-Score-Query_upper" type="xs:double" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay Activity Outcome Query -->
+<xs:element name="PCT-Assay-Activity-Outcome-Query">
+  <xs:complexType>
+    <xs:simpleContent>
+      <xs:extension base="xs:integer">
+        <xs:attribute name="value" use="optional">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+<!--
+    all	-  All                                      (default, if not specified)
+    inactive	-  Inactive
+    active	-  Active
+    inconclusive	-  Inconclusive
+    unspecified	-  Unspecified
+-->
+              <xs:enumeration value="all" ncbi:intvalue="0"/>
+              <xs:enumeration value="inactive" ncbi:intvalue="1"/>
+              <xs:enumeration value="active" ncbi:intvalue="2"/>
+              <xs:enumeration value="inconclusive" ncbi:intvalue="3"/>
+              <xs:enumeration value="unspecified" ncbi:intvalue="4"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay other options for query and display -->
+<xs:element name="PCT-Assay-OtherOption">
+  <xs:complexType>
+    <xs:sequence>
+<!-- parameter name -->
+      <xs:element name="PCT-Assay-OtherOption_name" type="xs:string"/>
+      <xs:element name="PCT-Assay-OtherOption_value">
+        <xs:complexType>
+          <xs:choice>
+            <xs:element name="PCT-Assay-OtherOption_value_ival" type="xs:integer"/>
+            <xs:element name="PCT-Assay-OtherOption_value_fval" type="xs:double"/>
+            <xs:element name="PCT-Assay-OtherOption_value_bval">
+              <xs:complexType>
+                <xs:attribute name="value" use="required">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:enumeration value="true"/>
+                      <xs:enumeration value="false"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="PCT-Assay-OtherOption_value_sval" type="xs:string"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+<!-- parameter comment -->
+      <xs:element name="PCT-Assay-OtherOption_comment" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem BioAssay data focus options -->
+<xs:element name="PCT-Assay-FocusOption">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-Assay-FocusOption_group-results-by" minOccurs="0">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    compound	-  Compound            (default, if not specified)
+    compound-same-connectivity	-  Compound, Same Connectivity
+    parent	-  Parent Compound
+    parent-same-connectivity	-  Parent Compound, Same Connectivity
+    substance	-  Substance
+-->
+                    <xs:enumeration value="compound" ncbi:intvalue="0"/>
+                    <xs:enumeration value="compound-same-connectivity" ncbi:intvalue="1"/>
+                    <xs:enumeration value="parent" ncbi:intvalue="2"/>
+                    <xs:enumeration value="parent-same-connectivity" ncbi:intvalue="3"/>
+                    <xs:enumeration value="substance" ncbi:intvalue="4"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-Assay-FocusOption_duplicate-test-option" minOccurs="0">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    flag-discrepencies	-  Flag Discrepancies      (default, if not specified)
+    exclude-duplicate	-  Exclude Duplicates
+    most-recent	-  Most Recent
+    most-active	-  Most Active
+    least-active	-  Least Active
+    show-discrepant-only	-  Show discrepant only
+-->
+                    <xs:enumeration value="flag-discrepencies" ncbi:intvalue="0"/>
+                    <xs:enumeration value="exclude-duplicate" ncbi:intvalue="1"/>
+                    <xs:enumeration value="most-recent" ncbi:intvalue="2"/>
+                    <xs:enumeration value="most-active" ncbi:intvalue="3"/>
+                    <xs:enumeration value="least-active" ncbi:intvalue="4"/>
+                    <xs:enumeration value="show-discrepant-only" ncbi:intvalue="5"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- (Input) PubChem Chemical Structure Standardization -->
+<xs:element name="PCT-Standardize">
+  <xs:complexType>
+    <xs:sequence>
+<!-- chemical structure input -->
+      <xs:element name="PCT-Standardize_structure">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-Structure"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- structure output format -->
+      <xs:element name="PCT-Standardize_oformat">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-StructureFormat"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- (Input/Output) Single PubChem Structure -->
+<xs:element name="PCT-Structure">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-Structure_structure">
+        <xs:complexType>
+          <xs:choice>
+<!-- Input is a file -->
+            <xs:element name="PCT-Structure_structure_binary" type="xs:hexBinary"/>
+<!-- Single-line text -->
+            <xs:element name="PCT-Structure_structure_string" type="xs:string"/>
+<!-- Multi-line text -->
+            <xs:element name="PCT-Structure_structure_strings">
+              <xs:complexType>
+                <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                  <xs:element name="PCT-Structure_structure_strings_E" type="xs:string"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+<!-- chemical structure format -->
+      <xs:element name="PCT-Structure_format">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-StructureFormat"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Default is no compression -->
+      <xs:element name="PCT-Structure_compression" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+<!--
+    none	-  no compression
+    gzip	-  gzip format
+    bzip2	-  bzip2 format
+-->
+                <xs:enumeration value="none"/>
+                <xs:enumeration value="gzip"/>
+                <xs:enumeration value="bzip2"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- (Input/Output) PubChem Structure Format -->
+<xs:element name="PCT-StructureFormat">
+  <xs:complexType>
+    <xs:attribute name="value" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+<!--
+    asnb	-  PubChem ASN.1 Binary Format
+    asnt	-  PubChem ASN.1 Text Format
+    xml	-  PubChem XML Format
+    sdf	-  SDF Format
+    smiles	-  SMILES Format
+    inchi	-  InChI Format
+-->
+          <xs:enumeration value="asnb"/>
+          <xs:enumeration value="asnt"/>
+          <xs:enumeration value="xml"/>
+          <xs:enumeration value="sdf"/>
+          <xs:enumeration value="smiles"/>
+          <xs:enumeration value="inchi"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+</xs:element>
+
+<!--
+ (Input) Assay Description Query;
+ Select which fields are of interest
+-->
+<xs:element name="PCT-QueryAssayDescription">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-QueryAssayDescription_aid" type="xs:integer"/>
+<!-- to retrieve individual bits of information; returns PCT-Assay-Descr -->
+      <xs:element name="PCT-QueryAssayDescription_get-name" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryAssayDescription_get-description" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryAssayDescription_get-protocol" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryAssayDescription_get-comment" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryAssayDescription_get-columns" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryAssayDescription_get-method" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryAssayDescription_get-target" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryAssayDescription_get-version" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryAssayDescription_get-counts" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryAssayDescription_get-full-description" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="asnt"/>
+                <xs:enumeration value="asnb"/>
+                <xs:enumeration value="xml"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!--
+ (Output) Assay Desription Information
+ Note this is a subset/simplification of the full 
+ PC-AssayDescription in pcassay.asn
+-->
+<xs:element name="PCT-Assay-Descr">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-Assay-Descr_aid" type="xs:integer"/>
+      <xs:element name="PCT-Assay-Descr_name" type="xs:string" minOccurs="0"/>
+      <xs:element name="PCT-Assay-Descr_description" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="PCT-Assay-Descr_description_E" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-Assay-Descr_protocol" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="PCT-Assay-Descr_protocol_E" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-Assay-Descr_comment" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="PCT-Assay-Descr_comment_E" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-Assay-Descr_columns" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-Column-Descr"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-Assay-Descr_method" type="xs:string" minOccurs="0"/>
+      <xs:element name="PCT-Assay-Descr_target" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="PCT-Assay-Target"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-Assay-Descr_version" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="PCT-Assay-Descr_version_version" type="xs:integer"/>
+            <xs:element name="PCT-Assay-Descr_version_revision" type="xs:integer"/>
+<!-- date (yyyymmdd format) of last change to data for any tested SID -->
+            <xs:element name="PCT-Assay-Descr_version_last-data-change" type="xs:integer"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- counts for SID and CID (not from the description blob) -->
+      <xs:element name="PCT-Assay-Descr_sid-count-all" type="xs:integer" minOccurs="0"/>
+      <xs:element name="PCT-Assay-Descr_sid-count-active" type="xs:integer" minOccurs="0"/>
+      <xs:element name="PCT-Assay-Descr_sid-count-inactive" type="xs:integer" minOccurs="0"/>
+      <xs:element name="PCT-Assay-Descr_sid-count-inconclusive" type="xs:integer" minOccurs="0"/>
+      <xs:element name="PCT-Assay-Descr_sid-count-unspecified" type="xs:integer" minOccurs="0"/>
+      <xs:element name="PCT-Assay-Descr_sid-count-probe" type="xs:integer" minOccurs="0"/>
+      <xs:element name="PCT-Assay-Descr_cid-count-all" type="xs:integer" minOccurs="0"/>
+      <xs:element name="PCT-Assay-Descr_cid-count-active" type="xs:integer" minOccurs="0"/>
+      <xs:element name="PCT-Assay-Descr_cid-count-inactive" type="xs:integer" minOccurs="0"/>
+      <xs:element name="PCT-Assay-Descr_cid-count-inconclusive" type="xs:integer" minOccurs="0"/>
+      <xs:element name="PCT-Assay-Descr_cid-count-unspecified" type="xs:integer" minOccurs="0"/>
+      <xs:element name="PCT-Assay-Descr_cid-count-probe" type="xs:integer" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="PCT-Assay-Target">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-Assay-Target_gi" type="xs:integer"/>
+      <xs:element name="PCT-Assay-Target_targetname" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!--
+ (Output) Assay Column Information
+ Note this is a subset/simplification of the full 
+ PC-ResultType in pcassay.asn
+-->
+<xs:element name="PCT-Assay-Column-Descr">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-Assay-Column-Descr_heading">
+        <xs:complexType>
+          <xs:choice>
+            <xs:element name="PCT-Assay-Column-Descr_heading_tid" type="xs:integer"/>
+            <xs:element name="PCT-Assay-Column-Descr_heading_special">
+              <xs:complexType>
+                <xs:attribute name="value" use="required">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+<!--
+    outcome	-  PC-AssayResults.outcome in pcassay.asn
+    score	-  PC-AssayResults.rank in pcassay.asn
+-->
+                      <xs:enumeration value="outcome"/>
+                      <xs:enumeration value="score"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-Assay-Column-Descr_name" type="xs:string"/>
+      <xs:element name="PCT-Assay-Column-Descr_description" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="PCT-Assay-Column-Descr_description_E" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-Assay-Column-Descr_type" type="xs:string"/>
+      <xs:element name="PCT-Assay-Column-Descr_unit" type="xs:string" minOccurs="0"/>
+      <xs:element name="PCT-Assay-Column-Descr_tested-concentration" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="PCT-Assay-Column-Descr_tested-concentration_concentration" type="xs:double"/>
+            <xs:element name="PCT-Assay-Column-Descr_tested-concentration_unit" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-Assay-Column-Descr_active-concentration" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!--
+ (Input) Get a score matrix for a set of IDs; the result is a URL
+ to a file containing uid-uid-score triplets.
+-->
+<xs:element name="PCT-QueryScoreMatrix">
+  <xs:complexType>
+    <xs:sequence>
+<!-- ID list; if ids-to not present, matrix will be ids X ids -->
+      <xs:element name="PCT-QueryScoreMatrix_ids">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryUids"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- If given, matrix will be ids X ids-to -->
+      <xs:element name="PCT-QueryScoreMatrix_ids-to" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryUids"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryScoreMatrix_type">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+<!--
+    similarity-2d-subs	-  2D Tanimoto similarity based on substructure key fingerprint
+    shape-optimized-3d	-  3D similarity optimized by shape
+    feature-optimized-3d	-  3D similarity optimized by feature
+-->
+                <xs:enumeration value="similarity-2d-subs"/>
+                <xs:enumeration value="shape-optimized-3d"/>
+                <xs:enumeration value="feature-optimized-3d"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryScoreMatrix_format">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+<!--
+    csv	-  Comma-separated values   
+    id-id-score	-  Each line has id [tab] id [tab] score   
+-->
+                <xs:enumeration value="csv"/>
+                <xs:enumeration value="id-id-score"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+<!-- Default is gzip        -->
+      <xs:element name="PCT-QueryScoreMatrix_compression" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+<!--
+    none	-  no compression   
+    gzip	-  gzip (.gz)   
+    bzip2	-  bzip2 (.bz2)   
+-->
+                <xs:enumeration value="none"/>
+                <xs:enumeration value="gzip"/>
+                <xs:enumeration value="bzip2"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+<!--
+ if 3D, use up to N conformers for each structure (if conformers are not being
+ specified directly); not all records may have this many conformers, and upper limit 
+ of N is set by the PubChem 3D system (currently 10)
+ default 1
+-->
+      <xs:element name="PCT-QueryScoreMatrix_n-3d-conformers" type="xs:integer" minOccurs="0"/>
+<!--
+ by default, the 3D structure of a parent is used for scoring if the requested record has no 3D;
+ set this to true to avoid this automatic substitution
+ default false
+-->
+      <xs:element name="PCT-QueryScoreMatrix_no-3d-parent" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!--
+ (Input) Do a link expansion on the given list of IDs, returning either
+ an Entrez history item or list of ids, depending on query options.
+-->
+<xs:element name="PCT-QueryELink">
+  <xs:complexType>
+    <xs:sequence>
+<!-- starting ID list (and db) -->
+      <xs:element name="PCT-QueryELink_ids-from">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryUids"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!--
+ link name, same as used by Entrez/eUtils; link
+   type must match to/from database
+-->
+      <xs:element name="PCT-QueryELink_link-name" type="xs:string"/>
+<!-- Entrez database of result IDs -->
+      <xs:element name="PCT-QueryELink_db-to" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Compound/Substance Conformer Display -->
+<xs:element name="PCT-ViewConformer">
+  <xs:complexType>
+    <xs:sequence>
+<!-- PubChem Compound or Substance  -->
+      <xs:element name="PCT-ViewConformer_id">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryUids"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Which conformer to display, default is 0 (1st conf) -->
+      <xs:element name="PCT-ViewConformer_conf-idx" type="xs:integer" minOccurs="0"/>
+<!--
+ Display style of images, default is rocking motion,
+   normal speed, no hydrogens, and 400x400 image
+-->
+      <xs:element name="PCT-ViewConformer_img-style" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-3DImgStyle"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} Image Style for PubChem 3D View -->
+<xs:element name="PCT-3DImgStyle">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="PCT-3DImgStyle_rotation">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    default	-  Rocking images
+    pos-axially	-  Counter-clockwise axially
+    neg-axially	-  Clockwise axially
+    pos-equatorially	-  Counter-clockwise equatorially
+    neg-equatorially	-  Clockwise equatorially
+    pos-azimuthally	-  Counter-clockwise azimuthally
+    neg-azimuthally	-  Clockwise azimuthally
+-->
+                    <xs:enumeration value="default" ncbi:intvalue="0"/>
+                    <xs:enumeration value="pos-axially" ncbi:intvalue="1"/>
+                    <xs:enumeration value="neg-axially" ncbi:intvalue="2"/>
+                    <xs:enumeration value="pos-equatorially" ncbi:intvalue="3"/>
+                    <xs:enumeration value="neg-equatorially" ncbi:intvalue="4"/>
+                    <xs:enumeration value="pos-azimuthally" ncbi:intvalue="5"/>
+                    <xs:enumeration value="neg-azimuthally" ncbi:intvalue="6"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-3DImgStyle_speed">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:enumeration value="stop" ncbi:intvalue="0"/>
+                    <xs:enumeration value="slow" ncbi:intvalue="1"/>
+                    <xs:enumeration value="normal" ncbi:intvalue="2"/>
+                    <xs:enumeration value="fast" ncbi:intvalue="3"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+<!-- Display hydrogens -->
+      <xs:element name="PCT-3DImgStyle_hydrogen">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="true"/>
+                <xs:enumeration value="false"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+<!-- Image size of X by X, 100 <= X <= 1000 -->
+      <xs:element name="PCT-3DImgStyle_size" type="xs:integer"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} PubChem Conformer Alignment View -->
+<xs:element name="PCT-ViewConformerAlignment">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Conformer superposition matrix -->
+      <xs:element name="PCT-ViewConformerAlignment_matrix" type="xs:hexBinary"/>
+<!--
+ User-defined referenece, conformer information is 
+ from 3D search.
+-->
+      <xs:element name="PCT-ViewConformerAlignment_input-ref" type="xs:hexBinary" minOccurs="0"/>
+<!-- User-defined structure string, forwarded by 3D search. -->
+      <xs:element name="PCT-ViewConformerAlignment_input-query" type="xs:string" minOccurs="0"/>
+      <xs:element name="PCT-ViewConformerAlignment_filter" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+<!-- Maximum shape score for displayed superposition -->
+            <xs:element name="PCT-ViewConformerAlignment_filter_shape-score" type="xs:integer"/>
+<!-- Maximum feature score for displayed superposition -->
+            <xs:element name="PCT-ViewConformerAlignment_filter_feature-score" type="xs:integer"/>
+<!-- Remove self neighboring pair to be displayed  -->
+            <xs:element name="PCT-ViewConformerAlignment_filter_rmself">
+              <xs:complexType>
+                <xs:attribute name="value" use="required">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:enumeration value="true"/>
+                      <xs:enumeration value="false"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-ViewConformerAlignment_optimization">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    shape-based	-  Maximize overlap of atoms
+    feature-based	-  Maximize overlap of features
+-->
+                    <xs:enumeration value="shape-based" ncbi:intvalue="0"/>
+                    <xs:enumeration value="feature-based" ncbi:intvalue="1"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-ViewConformerAlignment_sort" minOccurs="0">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    shape-then-feature	-  descending order of shape similarity then feature similarity
+    feature-then-shape	-  descending order of feature similarity then shape similarity
+    shape-and-feature	-  descending order of combined shape and feature similarity
+    shape-only	-  descending order of shape similarity
+    feature-only	-  descending order of feature similarity
+    numerical-id-order	-  ascending numeric ordering of conformer IDs
+    input-order	-  no ordering of results (default)
+-->
+                    <xs:enumeration value="shape-then-feature" ncbi:intvalue="0"/>
+                    <xs:enumeration value="feature-then-shape" ncbi:intvalue="1"/>
+                    <xs:enumeration value="shape-and-feature" ncbi:intvalue="2"/>
+                    <xs:enumeration value="shape-only" ncbi:intvalue="3"/>
+                    <xs:enumeration value="feature-only" ncbi:intvalue="4"/>
+                    <xs:enumeration value="numerical-id-order" ncbi:intvalue="7"/>
+                    <xs:enumeration value="input-order" ncbi:intvalue="8"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-ViewConformerAlignment_algn">
+        <xs:complexType>
+          <xs:choice>
+<!-- indices of Displayed pair superposition -->
+            <xs:element name="PCT-ViewConformerAlignment_algn_pair">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-PairSuperposition"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+<!-- indices of Displayed ref-fit superposition -->
+            <xs:element name="PCT-ViewConformerAlignment_algn_ref-fits">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="PCT-RefFitSuperposition"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+<!--
+ Display style of images, default is rocking motion,
+ normal speed, no hydrogens, and 400x400 image
+-->
+      <xs:element name="PCT-ViewConformerAlignment_img-style" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-3DImgStyle"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} Compound Pair and and Conformer Pairs for PubChem Conformer Alignment -->
+<xs:element name="PCT-PairSuperposition">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Displayed compound pair index -->
+      <xs:element name="PCT-PairSuperposition_cmpd-pair-idx" type="xs:integer"/>
+<!-- Displayed conformer superposution index -->
+      <xs:element name="PCT-PairSuperposition_confpair-idx" type="xs:integer"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} Reference and Fit Conformers for PubChem Conformer Alignment -->
+<xs:element name="PCT-RefFitSuperposition">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Displayed ref index     -->
+      <xs:element name="PCT-RefFitSuperposition_ref-idx" type="xs:integer"/>
+<!-- Displayed fit index -->
+      <xs:element name="PCT-RefFitSuperposition_fit-idx" type="xs:integer"/>
+<!-- Displayed superposition index -->
+      <xs:element name="PCT-RefFitSuperposition_confpair-idx" type="xs:integer"/>
+<!-- Displayed superposition matrix index -->
+      <xs:element name="PCT-RefFitSuperposition_algn-idx" type="xs:integer"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input/Ouput} General data blob container -->
+<xs:element name="PCT-DataBlob">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Binary data -->
+      <xs:element name="PCT-DataBlob_data" type="xs:hexBinary"/>
+      <xs:element name="PCT-DataBlob_format" minOccurs="0">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="value" use="optional">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+<!--
+    asnb	-  binary ASN.1
+    asnt	-  NCBI text ASN.1
+-->
+                    <xs:enumeration value="unspecified" ncbi:intvalue="0"/>
+                    <xs:enumeration value="asnb" ncbi:intvalue="1"/>
+                    <xs:enumeration value="asnt" ncbi:intvalue="2"/>
+                    <xs:enumeration value="xml" ncbi:intvalue="3"/>
+                    <xs:enumeration value="sdf" ncbi:intvalue="4"/>
+                    <xs:enumeration value="csv" ncbi:intvalue="5"/>
+                    <xs:enumeration value="text" ncbi:intvalue="6"/>
+                    <xs:enumeration value="html" ncbi:intvalue="7"/>
+                    <xs:enumeration value="png" ncbi:intvalue="8"/>
+                    <xs:enumeration value="other" ncbi:intvalue="255"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-DataBlob_compression" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+<!--
+    none	-  default, if unspecified
+-->
+                <xs:enumeration value="none"/>
+                <xs:enumeration value="gzip"/>
+                <xs:enumeration value="bzip2"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} ID exchange service options -->
+<xs:element name="PCT-QueryIDExchange">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Input IDs (exact match lookup performed) -->
+      <xs:element name="PCT-QueryIDExchange_input">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryUids"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryIDExchange_operation-type">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+<!--
+    same	-  same chemical structure
+    sameste	-  same stereochemistry
+    sameiso	-  same isotopes
+    samecon	-  same connectivity
+    samepar	-  same parent
+    samepste	-  same parent stereochemistry
+    samepiso	-  same parent isotopes
+    samepcon	-  same parent connectivity
+    similar-compound	-  similar 2D structure
+    similar-conformer	-  similar 3D structure
+    parent	-  parent compound
+-->
+                <xs:enumeration value="same"/>
+                <xs:enumeration value="sameste"/>
+                <xs:enumeration value="sameiso"/>
+                <xs:enumeration value="samecon"/>
+                <xs:enumeration value="samepar"/>
+                <xs:enumeration value="samepste"/>
+                <xs:enumeration value="samepiso"/>
+                <xs:enumeration value="samepcon"/>
+                <xs:enumeration value="similar-compound"/>
+                <xs:enumeration value="similar-conformer"/>
+                <xs:enumeration value="parent"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PCT-QueryIDExchange_output-type">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+<!--
+    regid	-  Registry IDs
+    sid	-  SIDs
+    cid	-  CIDs
+    inchi	-  InChIs
+    inchikey	-  InChIKeys
+    synonyms	-  Synonyms (filtered)
+-->
+                <xs:enumeration value="regid"/>
+                <xs:enumeration value="sid"/>
+                <xs:enumeration value="cid"/>
+                <xs:enumeration value="inchi"/>
+                <xs:enumeration value="inchikey"/>
+                <xs:enumeration value="synonyms"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+<!--
+ Data source name to restrict output
+   Used only if output_type is (1)
+-->
+      <xs:element name="PCT-QueryIDExchange_output-dsn" type="xs:string" minOccurs="0"/>
+      <xs:element name="PCT-QueryIDExchange_output-method">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+<!--
+    entrez	-  Provide an Entrez History (Substance or Compound only)
+    file-list	-  Single column file showing unique results
+    file-pair	-  Two column file showing each input-output correspondence
+-->
+                <xs:enumeration value="entrez"/>
+                <xs:enumeration value="file-list"/>
+                <xs:enumeration value="file-pair"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+<!--
+ Destination WebEnvironment to put history
+   Used only if output_method is (1)
+-->
+      <xs:element name="PCT-QueryIDExchange_webenv" type="xs:string" minOccurs="0"/>
+<!-- Default is gzip -->
+      <xs:element name="PCT-QueryIDExchange_compression" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+<!--
+    none	-  no compression
+    gzip	-  gzip (.gz)
+    bzip2	-  bzip2 (.bz2)
+-->
+                <xs:enumeration value="none"/>
+                <xs:enumeration value="gzip"/>
+                <xs:enumeration value="bzip2"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- {Input} 3D service options -->
+<xs:element name="PCT-QueryPC3D">
+  <xs:complexType>
+    <xs:sequence>
+<!-- ids to align - currently CIDs only -->
+      <xs:element name="PCT-QueryPC3D_ids">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="PCT-QueryUids"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+</xs:schema>
