@@ -1,22 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using HelixToolkit.Wpf;
+using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
-using System.Xml.Serialization;
-
-using HelixToolkit.Wpf;
-using RestSharp;
-using System.Windows.Media.Imaging;
-
-using System.Windows;
-using Viewer3D;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
+using System.IO;
+using System.Windows;
+using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
+using System.Xml.Serialization;
+using Viewer3D;
 
 namespace ModelExplorer
 {
@@ -66,117 +61,8 @@ namespace ModelExplorer
             bonds = new List<Bond>();
         }
     }
-    //public class Atom
-    //{
-    //    public Point3D center { get; set; }
-    //    public AD descriptor { get; set;}
-    //    //public Compound c { get; set; }
-    //    public int aid { get; set; }
-
-    //    public Atom()
-    //    {
-
-    //    }
-
-    //    public Atom(int aid, double x, double y, double z, Compound c = null)
-    //    {
-    //        center = new Point3D(x, y, z);
-    //        //this.c = c; 
-    //    }
-    //    public Material Material()
-    //    {
-
-    //        if (descriptor.ShortName == "c")
-    //        {
-    //            return Materials.Gray;
-    //        }
-    //        else if (descriptor.ShortName == "o")
-    //        {
-    //            return Materials.Indigo;
-    //        }
-    //        else if (descriptor.ShortName == "h")
-    //        {
-    //            return Materials.White;
-    //        }
-    //        else if (descriptor.ShortName == "n")
-    //        {
-    //            return Materials.Orange;
-    //        }
-    //        else return Materials.Red;
-
-
-    //    }
-
-    //    //public List<Bond> Bonds()
-    //    //{
-    //    //    List<Bond> b = new List<Bond>();
-
-    //    //    foreach(Bond bond in c.bonds)
-    //    //    {
-    //    //        if (bond.first == aid)
-    //    //            b.Add(bond);
-    //    //        if (bond.second == aid)
-    //    //            b.Add(bond);
-    //    //    }
-
-    //    //    return b;
-    //    //}
-    //}
-    //public class Bond
-    //{
-    //    public int first { get; set; }
-    //    public int second { get; set; }
-    //    public int valency { get; set; }
-    //    //public Compound c { get; set; }
-
-    //    public List<Atom> atoms { get; set; }
-
-    //    public Bond()
-    //    {
-
-    //    }
-
-
-    //    public Bond(Compound c)
-    //    {
-    //      //  this.c = c;
-    //    }
-    //    public Point3D First
-    //    {
-    //        get
-    //        {
-    //            return atoms[first -1].center;
-    //        }
-    //        set
-    //        {
-
-    //        }
-    //    }
-    //    public Point3D Second
-    //    {
-    //        get
-    //        {
-    //            return atoms[second -1].center;
-    //        }
-    //    }
-    //    public Atom FirstAtom
-    //    {
-    //        get
-    //        {
-    //            return atoms[first - 1];
-    //        }
-    //    }
-    //    public Atom SecondAtom
-    //    {
-    //        get
-    //        {
-    //            return atoms[second - 1];
-    //        }
-    //    }
-    //}
-
-
-    public static class MaterialEx {
+    public static class MaterialEx
+    {
 
 
         public static Dictionary<System.Windows.Media.Color, Material> dict = new Dictionary<System.Windows.Media.Color, Material>();
@@ -651,6 +537,15 @@ namespace ModelExplorer
             return bitmapImage;
         }
 
+        public static byte[] ImageToBytes(Image img)
+        {
+            using (var stream = new MemoryStream())
+            {
+                img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                return stream.ToArray();
+            }
+        }
+
         static public BitmapImage LoadFormula(string name)
         {
 
@@ -662,17 +557,35 @@ namespace ModelExplorer
 
             byte[] bytes = response.RawBytes;
 
+            //var stream = new MemoryStream(bytes);
+            //Bitmap bb = new Bitmap(stream);
+            //bb.MakeTransparent(bb.GetPixel(1, 1));
+            //byte[] bbytes = ImageToBytes(bb);
+
+            BitmapImage b1 = null;
+
+            //BitmapImage b2 = null;
+
+            //try
+            //{
+
+            //    b1 = GetBitmapImage(bbytes);
+
+
+            //}
+            //catch (Exception ex) { };
+
 
             try
             {
 
-                BitmapImage b = GetBitmapImage(bytes);
+                b1 = GetBitmapImage(bytes);
 
-                return b;
+
             }
-            catch (Exception ex) { };
+            catch (Exception) { };
 
-            return new BitmapImage();
+            return b1;
 
         }
 
@@ -681,7 +594,7 @@ namespace ModelExplorer
 
             object obs = new object();
 
-            string path = "";
+            //string path = "";
 
             //https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/glucose/cids/TXT
             //https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/glucose/XML
@@ -1111,11 +1024,11 @@ namespace ModelExplorer
 
         }
 
-       /// <summary>
-       ///  modified from internet
-       /// </summary>
-       /// <param name="text"></param>
-       /// <returns></returns>
+        /// <summary>
+        ///  modified from internet
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         static public BitmapImage TextToBitmap(string text)
         {
             // Load the original image
@@ -1171,10 +1084,10 @@ namespace ModelExplorer
 
                 return GetBitmapImage(bytes);
 
-                
+
             }
 
-            
+
         }
 
     }
@@ -1215,4 +1128,3 @@ namespace ModelExplorer
         }
     }
 }
-    

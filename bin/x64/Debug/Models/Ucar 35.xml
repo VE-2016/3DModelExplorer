@@ -3,9 +3,9 @@
   <atoms>
     <Atom>
       <center>
-        <X>1.5903</X>
-        <Y>-0.8258</Y>
-        <Z>0.0378</Z>
+        <X>-0.4721</X>
+        <Y>-1.3536</Y>
+        <Z>-0.1558</Z>
       </center>
       <descriptor>
         <ShortName>o</ShortName>
@@ -14,31 +14,20 @@
     </Atom>
     <Atom>
       <center>
-        <X>-1.9942</X>
-        <Y>0.1028</Y>
-        <Z>-0.1015</Z>
+        <X>1.934</X>
+        <Y>0.0013</Y>
+        <Z>0.1076</Z>
       </center>
       <descriptor>
-        <ShortName>n</ShortName>
+        <ShortName>o</ShortName>
       </descriptor>
       <aid>0</aid>
     </Atom>
     <Atom>
       <center>
-        <X>0.4693</X>
-        <Y>-0.0273</Y>
-        <Z>-0.3404</Z>
-      </center>
-      <descriptor>
-        <ShortName>c</ShortName>
-      </descriptor>
-      <aid>0</aid>
-    </Atom>
-    <Atom>
-      <center>
-        <X>-0.7967</X>
-        <Y>-0.643</Y>
-        <Z>0.2606</Z>
+        <X>-0.4535</X>
+        <Y>-0.0168</Y>
+        <Z>0.3428</Z>
       </center>
       <descriptor>
         <ShortName>c</ShortName>
@@ -47,9 +36,9 @@
     </Atom>
     <Atom>
       <center>
-        <X>0.7313</X>
-        <Y>1.3933</Y>
-        <Z>0.1435</Z>
+        <X>0.7489</X>
+        <Y>0.7009</Y>
+        <Z>-0.2569</Z>
       </center>
       <descriptor>
         <ShortName>c</ShortName>
@@ -58,9 +47,20 @@
     </Atom>
     <Atom>
       <center>
-        <X>0.4149</X>
-        <Y>-0.0317</Y>
-        <Z>-1.4353</Z>
+        <X>-1.7573</X>
+        <Y>0.6681</Y>
+        <Z>-0.0377</Z>
+      </center>
+      <descriptor>
+        <ShortName>c</ShortName>
+      </descriptor>
+      <aid>0</aid>
+    </Atom>
+    <Atom>
+      <center>
+        <X>-0.3491</X>
+        <Y>-0.0765</Y>
+        <Z>1.4317</Z>
       </center>
       <descriptor>
         <ShortName>h</ShortName>
@@ -69,9 +69,9 @@
     </Atom>
     <Atom>
       <center>
-        <X>-0.709</X>
-        <Y>-0.6871</Y>
-        <Z>1.3526</Z>
+        <X>0.7012</X>
+        <Y>0.7211</Y>
+        <Z>-1.3507</Z>
       </center>
       <descriptor>
         <ShortName>h</ShortName>
@@ -80,9 +80,9 @@
     </Atom>
     <Atom>
       <center>
-        <X>-0.8967</X>
-        <Y>-1.6812</Y>
-        <Z>-0.0775</Z>
+        <X>0.826</X>
+        <Y>1.7275</Y>
+        <Z>0.113</Z>
       </center>
       <descriptor>
         <ShortName>h</ShortName>
@@ -91,9 +91,9 @@
     </Atom>
     <Atom>
       <center>
-        <X>1.6841</X>
-        <Y>1.7603</Y>
-        <Z>-0.2541</Z>
+        <X>-2.6111</X>
+        <Y>0.1308</Y>
+        <Z>0.389</Z>
       </center>
       <descriptor>
         <ShortName>h</ShortName>
@@ -102,9 +102,9 @@
     </Atom>
     <Atom>
       <center>
-        <X>0.8156</X>
-        <Y>1.4252</Y>
-        <Z>1.2355</Z>
+        <X>-1.7824</X>
+        <Y>1.7013</Y>
+        <Z>0.3216</Z>
       </center>
       <descriptor>
         <ShortName>h</ShortName>
@@ -113,9 +113,9 @@
     </Atom>
     <Atom>
       <center>
-        <X>-0.0587</X>
-        <Y>2.0827</Y>
-        <Z>-0.1681</Z>
+        <X>-1.8983</X>
+        <Y>0.6691</Y>
+        <Z>-1.1241</Z>
       </center>
       <descriptor>
         <ShortName>h</ShortName>
@@ -124,9 +124,9 @@
     </Atom>
     <Atom>
       <center>
-        <X>-2.8156</X>
-        <Y>-0.377</Y>
-        <Z>0.2637</Z>
+        <X>-1.2339</X>
+        <Y>-1.8054</Y>
+        <Z>0.2456</Z>
       </center>
       <descriptor>
         <ShortName>h</ShortName>
@@ -135,20 +135,9 @@
     </Atom>
     <Atom>
       <center>
-        <X>-2.0968</X>
-        <Y>0.1155</Y>
-        <Z>-1.1153</Z>
-      </center>
-      <descriptor>
-        <ShortName>h</ShortName>
-      </descriptor>
-      <aid>0</aid>
-    </Atom>
-    <Atom>
-      <center>
-        <X>1.4396</X>
-        <Y>-1.7233</Y>
-        <Z>-0.3047</Z>
+        <X>1.8475</X>
+        <Y>-0.9097</Y>
+        <Z>-0.2214</Z>
       </center>
       <descriptor>
         <ShortName>h</ShortName>
@@ -164,17 +153,12 @@
     </Bond>
     <Bond>
       <first>1</first>
-      <second>14</second>
+      <second>12</second>
       <valency>0</valency>
     </Bond>
     <Bond>
       <first>2</first>
       <second>4</second>
-      <valency>0</valency>
-    </Bond>
-    <Bond>
-      <first>2</first>
-      <second>12</second>
       <valency>0</valency>
     </Bond>
     <Bond>
@@ -228,17 +212,12 @@
       <valency>0</valency>
     </Bond>
     <Bond>
-      <first>14</first>
+      <first>12</first>
       <second>1</second>
       <valency>0</valency>
     </Bond>
     <Bond>
       <first>4</first>
-      <second>2</second>
-      <valency>0</valency>
-    </Bond>
-    <Bond>
-      <first>12</first>
       <second>2</second>
       <valency>0</valency>
     </Bond>

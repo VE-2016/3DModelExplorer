@@ -136,6 +136,9 @@
   <ItemGroup>
     <Resource Include="Resources\DebugCheckedTests_16x.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\logo.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>
     <VisualStudio AllowExistingFolder="true" />

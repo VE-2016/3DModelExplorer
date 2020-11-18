@@ -1,35 +1,27 @@
 namespace Viewer3D
 {
-    using System.Collections.ObjectModel;
-    using System.Collections.Generic;
-    using System.Windows.Media.Media3D;
-
- 
-
     using HelixToolkit.Wpf;
-    using System;
-    using System.IO;
-    using System.Windows;
-
-    using System.Windows.Input;
-    using System.Windows.Controls;
- 
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System.Runtime.Serialization;
-    using System.Collections;
-    using System.Linq;
-    using System.Drawing;
-    using System.Windows.Media.Imaging;
-
     using ModelExplorer;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.IO;
+    using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Runtime.Serialization.Formatters.Binary;
     using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Media.Media3D;
     using Exporters = ModelExplorer.Exporters;
 
     public partial class MainWindow
     {
 
 
-        //string filename = AppDomain.CurrentDomain.BaseDirectory + "Files\\" + "CID-Synonym-unfiltered";
         string fileFolder = AppDomain.CurrentDomain.BaseDirectory + "Files\\" + "Content";
 
         public string CurrentModelXml { get; set; }
@@ -38,6 +30,7 @@ namespace Viewer3D
 
         static public bool DebugMode = true;
 
+        DataContext dataContext = new DataContext();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
@@ -45,8 +38,10 @@ namespace Viewer3D
         public MainWindow()
         {
 
-           
+
             this.InitializeComponent();
+
+            this.DataContext = dataContext;
 
             //var c = DataEx.GetData();
 
@@ -54,10 +49,10 @@ namespace Viewer3D
 
             var f = AppDomain.CurrentDomain.BaseDirectory;
 
-            Uri iconUri = new Uri(f + "logo.png", UriKind.RelativeOrAbsolute);
-            this.Icon = BitmapFrame.Create(iconUri);
+            //Uri iconUri = new Uri(f + "logo.png", UriKind.RelativeOrAbsolute);
+            //this.Icon = BitmapFrame.Create(iconUri);
 
-            this.DataContext = this;
+            //this.DataContext = this;
 
             //vpViewPort.Source = BitmapFrame.Create(iconUri);
 
@@ -102,7 +97,7 @@ namespace Viewer3D
 
         void LoadTreeView()
         {
-           
+
 
 
             string[] s = new string[]{"Alanine", "Arginine","Asparagine","Aspartic acid", "Cysteine", "Glutamic acid","Glutamine","Glycine","Histidine","Hydroxyproline","Isoleucine",
@@ -141,14 +136,14 @@ namespace Viewer3D
             public string Path { get; set; }
 
             public FolderEx(string name, string path) { Name = name; Path = path; }
-           
+
         }
 
         string ModelsPath()
         {
             var f = AppDomain.CurrentDomain.BaseDirectory;
 
-           return f + "Models";
+            return f + "Models";
 
         }
 
@@ -168,13 +163,13 @@ namespace Viewer3D
                 FolderEx ff = new FolderEx(fileName, file);
 
                 lvModels2.Items.Add(ff);
-  
+
             }
         }
 
         private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.OemPlus)
+            if (e.Key == Key.OemPlus)
             {
 
                 if (selected == null)
@@ -204,7 +199,7 @@ namespace Viewer3D
             if (ObservableElements != null)
                 foreach (var ew in ObservableElements)
                     view.Children.Remove(ew);
-      
+
             ObservableElements = new ObservableCollection<UIElement3D>();
 
             int i = lb.SelectedIndex;
@@ -241,7 +236,7 @@ namespace Viewer3D
             {
 
                 var v = new UISphere(factor, es, es.center, Materials.Red, view);
-                
+
                 view.Children.Add(v);
 
                 atoms.Add(es, v);
@@ -252,7 +247,7 @@ namespace Viewer3D
 
             foreach (var es in c.bonds)
             {
-                
+
                 var v = new UIPipe(factor, es, es.First, es.Second, es.FirstAtom, es.SecondAtom, 0.2, Materials.Green, view);
 
                 List<UIPipe> af = null;
@@ -286,6 +281,16 @@ namespace Viewer3D
             LoadModelsFolder();
 
             view.InvalidateVisual();
+
+            var namenoext = filename;
+
+            var image = DataEx.LoadFormula(namenoext);
+
+            imgFormula.Source = image;
+
+            BitmapSource b = DataEx.TextToBitmap(namenoext);
+
+            imgHeader.Source = b;
         }
 
         private void LoadFromXml(string file)
@@ -340,58 +345,28 @@ namespace Viewer3D
                 {
                     af = new List<UIPipe>();
                 }
-                    //var w = af.Where(s => s.ToStringEx() == v.ToStringEx()).Count();
 
-                   // if (w == 0)
-                    {
-                        view.Children.Add(v);
-                        af.Add(v);
-                        ObservableElements.Add(v);
+                {
+                    view.Children.Add(v);
+                    af.Add(v);
+                    ObservableElements.Add(v);
 
-                    }
+                }
 
                 if (!dict.ContainsKey(sf))
                     dict.Add(sf, af);
 
-                 //   af = dict[sf];
-                
-              
-                {
-                    //af = new List<UIPipe>();
-
-                    //view.Children.Add(v);
-                    //af.Add(v);
-                    //ObservableElements.Add(v);
-
-                    //dict.Add(sf, af);
-                }
-
-                
 
                 sf = atoms[es.SecondAtom];
-                    if (dict2.ContainsKey(sf))
-                        af = dict2[sf];
-                    else
-                    {
-                        af = new List<UIPipe>();
-                        dict2.Add(sf, af);
-                    }
+                if (dict2.ContainsKey(sf))
+                    af = dict2[sf];
+                else
+                {
+                    af = new List<UIPipe>();
+                    dict2.Add(sf, af);
+                }
 
                 af.Add(v);
-                    
-
-               
-             
-
-
-            
-               
-
-                //af.Add(v);
-
-
-
-               
 
             }
 
@@ -427,7 +402,7 @@ namespace Viewer3D
                 return;
             string name = d.Title;
 
-            var(content,  c) = DataEx.GetRawData(name);
+            var (content, c) = DataEx.GetRawData(name);
 
             if (c == null)
                 return;
@@ -462,7 +437,7 @@ namespace Viewer3D
 
                 var v = new UIPipe(factor, es, es.First, es.Second, es.FirstAtom, es.SecondAtom, 0.2, Materials.Green, view);
 
-                
+
 
                 UISphere sf = atoms[es.FirstAtom];
                 if (dict.ContainsKey(sf))
@@ -686,89 +661,6 @@ namespace Viewer3D
         }
 
 
-        //public List<string> GetLines(int offset, int count)
-        //{
-
-
-        //    var lines = new List<string>();
-        //    var counter = 0;
-        //    using (var sr = new StreamReader(filename))
-        //    {
-        //        string line;
-        //        while ((line = sr.ReadLine()) != null)
-        //        {
-
-        //            if (counter >= offset)
-        //            {
-
-        //                lines.Add(line);
-
-        //            }
-        //            counter++;
-        //            if (counter > offset + count - 1)
-        //                break;
-        //        }
-        //    }
-
-        //    return lines;
-        //}
-
-        //public void SQLiteConfigure()
-        //{
-        //    string file = AppDomain.CurrentDomain.BaseDirectory + "Files\\" + "sqllite.db";
-        //    string connectionString = @"Data Source=" + file + ";Version=3; FailIfMissing=false; Foreign Keys=True;";
-        //    string name = "histidine";
-        //    using (SQLiteConnection conn = new SQLiteConnection(connectionString))
-        //    {
-        //        conn.Open();
-
-        //        using (SQLiteCommand command = conn.CreateCommand())
-        //        {
-
-        //            command.CommandText = "CREATE TABLE IF NOT EXISTS names (name VARCHAR(2000))";
-        //            command.ExecuteNonQuery();
-
-        //            SQLiteCommand sqlComm;
-        //            sqlComm = new SQLiteCommand("begin", conn);
-        //            sqlComm.ExecuteNonQuery();
-
-        //            int i = 0;
-        //            while (i < 1000)
-        //            {
-        //                command.CommandText = "INSERT INTO names (name) VALUES ('" + name + "')";
-        //                command.ExecuteNonQuery();
-        //                i++;
-        //            }
-
-        //            sqlComm = new SQLiteCommand("end", conn);
-        //            sqlComm.ExecuteNonQuery();
-
-        //            string sql = "SELECT * FROM names LIMIT 50, 1000";
-
-        //            int c = 0;
-
-        //            using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-        //            {
-        //                using (SQLiteDataReader reader = cmd.ExecuteReader())
-        //                {
-        //                    while (reader.Read())
-        //                    {
-
-        //                        // reader["LangTitle"].ToString();
-        //                        c++;
-        //                    }
-        //                }
-        //            }
-
-        //            MessageBox.Show("Records - " + c.ToString());
-        //        }
-        //        conn.Close();
-        //    }
-        //}
-
-
-
-
         /// <summary>
         /// Gets or sets the observable elements.
         /// </summary>
@@ -776,7 +668,7 @@ namespace Viewer3D
 
         private void Button_MouseDown(object sender, MouseButtonEventArgs e)
         {
-           
+
         }
 
         private void Button_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -840,12 +732,19 @@ namespace Viewer3D
             }
         }
 
+
+        //ObservableCollection<Item> entries = new ObservableCollection<Item>();
+
         private void Button_Search(object sender, RoutedEventArgs e)
         {
             AutoComplete autos = DataEx.Autocomplete(tbSearch.Text);
 
             List<Item> items = new List<Item>();
-            lb2.ItemsSource = items;
+
+            //var collection = new ObservableCollection<Item>();
+
+            dataContext.Entries.Clear();
+
 
             var files = new DirectoryInfo(fileFolder).GetFiles();
             foreach (var df in autos.dictionary_terms.compound)
@@ -853,7 +752,12 @@ namespace Viewer3D
                 Item dg = new Item();
                 dg.Title = df;
                 items.Add(dg);
+
+                dataContext.Entries.Add(dg);
+
             }
+
+            //lb2.ItemsSource = items;
 
             tpSearch.IsSelected = true;
         }
@@ -874,7 +778,7 @@ namespace Viewer3D
             CurrentModelXml = "";
 
             LoadModelsFolder();
-            
+
         }
 
         public static MemoryStream SerializeToStream(object objectType)
@@ -885,7 +789,7 @@ namespace Viewer3D
             return stream;
         }
 
- 
+
         public static object DeserializeFromStream(MemoryStream stream)
         {
             IFormatter formatter = new BinaryFormatter();
@@ -906,7 +810,7 @@ namespace Viewer3D
 
             device.Content = mv.Load(f.Path);
 
-            
+
 
 
             //view.Children.Clear();
@@ -919,7 +823,7 @@ namespace Viewer3D
 
             List<ModelVisual3D> m = new List<ModelVisual3D>();
 
-            foreach(var c in view.Viewport.Children)
+            foreach (var c in view.Viewport.Children)
             {
                 if (c.GetType() == typeof(ModelVisual3D))
                 {
@@ -931,7 +835,7 @@ namespace Viewer3D
             foreach (ModelVisual3D c in m)
             {
                 view.Viewport.Children.Remove(c);
-                
+
             }
 
             GC.Collect();
@@ -1035,7 +939,11 @@ namespace Viewer3D
 
             var image = DataEx.LoadFormula(namenoext);
 
+            imgHeaderEx.Source = image;
+
             imgFormula.Source = image;
+
+
 
             BitmapSource b = DataEx.TextToBitmap(namenoext);
 
@@ -1043,13 +951,15 @@ namespace Viewer3D
 
             tbStatusBar.Text = namenoext;
 
+            tbSearch.Text = namenoext;
+
         }
 
         private void btnSaveAsXml_Click(object sender, RoutedEventArgs e)
         {
-                      
 
-            foreach(UISphere a in atoms.Values)
+
+            foreach (UISphere a in atoms.Values)
             {
                 a.Update();
             }
@@ -1098,11 +1008,11 @@ namespace Viewer3D
         {
             xgrid.Visible = true;
             ygrid.Visible = true;
-            zgrid.Visible = true;
+            zgrid.Visible = false;
 
             mXGrid.IsChecked = true;
             mYGrid.IsChecked = true;
-            mZGrid.IsChecked = true;
+            mZGrid.IsChecked = false;
         }
 
         private void GridInvisible_Click(object sender, RoutedEventArgs e)
@@ -1228,14 +1138,14 @@ namespace Viewer3D
 
                     LoadDomainItem(name);
 
-                   
+
 
 
 
                 }));
 
             });
-      
+
         }
 
         private void mExit_Click(object sender, RoutedEventArgs e)
@@ -1246,6 +1156,18 @@ namespace Viewer3D
         private void tbNew_Click(object sender, RoutedEventArgs e)
         {
             NewViewPort();
+
+            DrawName("");
+        }
+
+        void DrawName(string name)
+        {
+
+            BitmapSource b = DataEx.TextToBitmap(name);
+
+            imgHeader.Source = b;
+
+            tbStatusBar.Text = name;
         }
 
         private void mNewViewport_Click(object sender, RoutedEventArgs e)
@@ -1258,6 +1180,18 @@ namespace Viewer3D
             MainWindow.DebugMode = MainWindow.DebugMode == true ? false : true;
         }
 
+        private void mShowFormula_Click(object sender, RoutedEventArgs e)
+        {
+            if (imgHeaderEx.Visibility != Visibility.Visible)
+            {
+                imgHeaderEx.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                imgHeaderEx.Visibility = Visibility.Collapsed;
+            }
+        }
+
         private void mAboutMessage_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("3DModelExplorer (JK)");
@@ -1265,7 +1199,7 @@ namespace Viewer3D
 
         private void btnRemove_Click(object sender, RoutedEventArgs e)
         {
-         
+
             if (lvModels2.SelectedItem == null)
                 return;
 
@@ -1389,24 +1323,24 @@ namespace Viewer3D
 
         static public GeometryModel3D mf(Atom atom)
         {
-           
-                if(!gf.ContainsKey(atom.Material()))
-                {
-                    MeshBuilder builder = new MeshBuilder();
 
-                    builder.AddSphere(new Point3D(), 0.5, 64, 64);
+            if (!gf.ContainsKey(atom.Material()))
+            {
+                MeshBuilder builder = new MeshBuilder();
 
-                    mff = new GeometryModel3D(builder.ToMesh(), atom.Material());
+                builder.AddSphere(new Point3D(), 0.5, 64, 64);
+
+                mff = new GeometryModel3D(builder.ToMesh(), atom.Material());
 
                 gf.Add(atom.Material(), mff);
 
-                    
-                }
 
-                return gf[atom.Material()];
+            }
 
-           
-        } 
+            return gf[atom.Material()];
+
+
+        }
 
         public UISphere(double _factor, Atom atom, Point3D center, Material material, HelixViewport3D view, double sphereSize = 0.5, MeshGeometry3D mesh = null)
         {
@@ -1438,7 +1372,7 @@ namespace Viewer3D
             }
 
             t = new TranslateTransform3D(center.X/**factor*/, center.Y/*factor*/, center.Z/*factor*/);
-            s = new ScaleTransform3D( factor, factor,  factor);
+            s = new ScaleTransform3D(factor, factor, factor);
             g = new Transform3DGroup();
             g.Children.Add(s);
             g.Children.Add(t);
@@ -1450,7 +1384,7 @@ namespace Viewer3D
             //atom.center = Transform.Transform(atom.center);
 
 
-         
+
 
         }
         Point3D? pt { get; set; }
@@ -1459,7 +1393,7 @@ namespace Viewer3D
         {
             base.OnMouseDown(events);
 
-            if(events.RightButton == MouseButtonState.Pressed)
+            if (events.RightButton == MouseButtonState.Pressed)
             {
                 MainWindow.selected = this;
                 GeometryModel3D c = Visual3DModel as GeometryModel3D;
@@ -1475,9 +1409,9 @@ namespace Viewer3D
 
             Point3D p = view.FindNearestPoint(events.GetPosition(view)).Value;
 
-           
+
             pt = (Point3D)(p - /*center*/t.Transform(center));
-            
+
 
             point.Material = Materials.DarkGray;
             events.Handled = true;
@@ -1493,11 +1427,11 @@ namespace Viewer3D
 
         public void TransformScale(double factor)
         {
-            s = new ScaleTransform3D(s.ScaleX * factor, s.ScaleY * factor, s.ScaleZ * factor) ;
+            s = new ScaleTransform3D(s.ScaleX * factor, s.ScaleY * factor, s.ScaleZ * factor);
 
             t = new TranslateTransform3D(t.OffsetX * factor, t.OffsetY * factor, t.OffsetZ * factor);
 
-           
+
         }
 
         public void ScaleSphere()
@@ -1505,12 +1439,12 @@ namespace Viewer3D
             sphereSize *= 1.1;
             GeometryModel3D model = null;
             MeshBuilder builder = new MeshBuilder();
-                builder.AddSphere(new Point3D(), sphereSize, 64, 64);
+            builder.AddSphere(new Point3D(), sphereSize, 64, 64);
 
-                model = new GeometryModel3D(builder.ToMesh(), atom.Material());
-            
+            model = new GeometryModel3D(builder.ToMesh(), atom.Material());
 
-            
+
+
             Visual3DModel = model;
         }
 
@@ -1520,7 +1454,7 @@ namespace Viewer3D
 
             g.Children.Add(s);
             g.Children.Add(t);
-            
+
             Transform = g;
         }
 
@@ -1531,7 +1465,7 @@ namespace Viewer3D
             if (pt == null)
                 return;
 
-         
+
             GeometryModel3D point = Visual3DModel as GeometryModel3D;
             Point3D p = view.FindNearestPoint(events.GetPosition(view)).Value;
             b = (Point3D)(p - pt);
@@ -1540,7 +1474,7 @@ namespace Viewer3D
             var s = new ScaleTransform3D(factor, factor, factor);
             g.Children.Add(s);
             g.Children.Add(t);
-            
+
             Transform = g;
 
             point.Material = Materials.Brown;//.DarkGray;
@@ -1548,7 +1482,7 @@ namespace Viewer3D
             if (MainWindow.dict.ContainsKey(this))
             {
                 List<UIPipe> fs = MainWindow.dict[this];
-                
+
                 foreach (var bs in fs)
                 {
                     bs.Rebuild(g);
@@ -1579,9 +1513,9 @@ namespace Viewer3D
 
             GeometryModel3D point = Visual3DModel as GeometryModel3D;
 
-           
-            if(this != MainWindow.selected)
-            point.Material = atom.Material(); //change mat to red on mouse enter
+
+            if (this != MainWindow.selected)
+                point.Material = atom.Material(); //change mat to red on mouse enter
             events.Handled = true;
         }
 
@@ -1601,13 +1535,13 @@ namespace Viewer3D
 
             GeometryModel3D point = Visual3DModel as GeometryModel3D;
 
-            point.Material = atom.Material(); 
+            point.Material = atom.Material();
             events.Handled = true;
         }
 
         public void Update()
         {
-           //atom.center = Transform.Transform(atom.center);
+            //atom.center = Transform.Transform(atom.center);
         }
 
     }
@@ -1691,13 +1625,13 @@ namespace Viewer3D
 
                 second = c;
             }
-           
-           Visual3DModel = model;
+
+            Visual3DModel = model;
         }
 
         Point3D? pt { get; set; }
         HelixViewport3D view { get; set; }
-        
+
         protected override void OnMouseDown(MouseButtonEventArgs events)
         {
             base.OnMouseDown(events);
@@ -1713,14 +1647,14 @@ namespace Viewer3D
             point.Material = Materials.DarkGray;
             events.Handled = true;
 
-           
+
         }
         Point3D b;
 
         public ScaleTransform3D s = new ScaleTransform3D();
         public TranslateTransform3D t = new TranslateTransform3D();
         Transform3DGroup g = new Transform3DGroup();
-        
+
         public void TransformScale(double factor)
         {
             s = new ScaleTransform3D(s.ScaleX * factor, s.ScaleY * factor, s.ScaleZ * factor);
@@ -1734,7 +1668,7 @@ namespace Viewer3D
         {
             s = new ScaleTransform3D(s.ScaleX * factor, s.ScaleY * factor, s.ScaleZ * factor);
 
-            
+
 
 
         }
@@ -1749,7 +1683,7 @@ namespace Viewer3D
             Transform = g;
         }
 
-    
+
         protected override void OnMouseMove(MouseEventArgs events)
         {
             base.OnMouseMove(events);
@@ -1770,8 +1704,8 @@ namespace Viewer3D
 
             Transform = g;
 
-            
-            
+
+
 
             point.Material = Materials.DarkGray;
             events.Handled = true;
@@ -1809,7 +1743,7 @@ namespace Viewer3D
             events.Handled = true;
         }
 
-       public string ToStringEx()
+        public string ToStringEx()
         {
             return bond.ToStringEx();
         }
@@ -1826,4 +1760,20 @@ namespace Viewer3D
 
         public ObservableCollection<DomainItem> Items { get; set; }
     }
+
+    public class DataContext
+    {
+        public ObservableCollection<Item> Entries { get; private set; }
+
+
+        public DataContext()
+        {
+            Entries = new ObservableCollection<Item>();
+
+        }
+
+
+    }
+
+
 }

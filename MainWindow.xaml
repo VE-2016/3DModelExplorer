@@ -5,20 +5,15 @@
         
  
     Title="3D Model Explorer" Height="774" Width="1207"
-    Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+    Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+    Icon="pack://application:,,,/3DModelExplorer;component/Resources/logo.png">
     <Window.Resources>
 
     </Window.Resources>
     <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,0" LastChildFill="True">
 
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="_New" />
-                <MenuItem Header="_Open" />
-                <MenuItem Header="_Save" />
-                <Separator />
-                <MenuItem Header="_Exit" x:Name="mExit" Click="mExit_Click"/>
-            </MenuItem>
+            
             <MenuItem Header="_View">
                 <MenuItem Header="Show Importers" x:Name="mToggleImporters"  IsChecked="True" Click="ToggleImporters_Click" IsCheckable="True">
                     
@@ -32,12 +27,12 @@
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/3DModelExplorer;component/Resources/PrintPreviewTwoPages_16x.png"/>
                     </MenuItem.Icon>
-                </MenuItem>/>
+                </MenuItem>
                 <MenuItem Header="All Grids Invisible"  Click="GridInvisible_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/3DModelExplorer;component/Resources/PrintPreviewTwoPages_16x.png"/>
                     </MenuItem.Icon>
-                </MenuItem>/>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="_Project">
                 <MenuItem Header="_New Viewport" x:Name="mNewViewport" Click="mNewViewport_Click" />
@@ -46,7 +41,12 @@
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/3DModelExplorer;component/Resources/DebugCheckedTests_16x.png"/>
                     </MenuItem.Icon>
-                </MenuItem> />
+                </MenuItem>
+                <MenuItem Header="Show Formula"  x:Name="mShowFormula" Click="mShowFormula_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/3DModelExplorer;component/Resources/DebugCheckedTests_16x.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
            
             <MenuItem Header="_Help">
@@ -65,7 +65,7 @@
             <ToolBar  Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" ToolBar.OverflowMode="Never" ToolBarTray.IsLocked="True" Loaded="ToolBar_Loaded">
                 <Button Content="Imports"   PreviewMouseLeftButtonDown="ToggleImporters"/>
                 <Button Content="Models"  PreviewMouseLeftButtonDown="ToggleModels" />
-                <Button Content="Save" PreviewMouseLeftButtonDown="Button_PreviewMouseLeftButtonDown_2" />
+               
                 <Separator />
             </ToolBar>
             <ToolBar  Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" ToolBar.OverflowMode="Never" ToolBarTray.IsLocked="True" Loaded="ToolBar_Loaded">
@@ -111,7 +111,7 @@
 
             </Grid>
             <TabControl TabStripPlacement="Top"  Grid.Row="1" Grid.Column="0" Background="LightGray" x:Name="tcData" HorizontalAlignment="Stretch">
-                <TabItem Header="General">
+                <TabItem Header="Loaded - XML">
 
                     <ListBox Name="lb" HorizontalContentAlignment="Stretch" >
 
@@ -137,7 +137,7 @@
                     </ListBox>
 
                 </TabItem>
-                <TabItem Header="Domains" x:Name="tbDomains">
+                <TabItem Header="Domains" x:Name="tbDomains" Visibility="Collapsed">
                     <Grid Margin="0">
                         <TreeView Name="trvMenu" SelectedItemChanged="trvMenu_SelectedItemChanged">
                             <TreeView.ItemTemplate>
@@ -150,7 +150,7 @@
                 </TabItem>
                 <TabItem Header="Search..." x:Name="tpSearch">
 
-                    <ListBox Name="lb2" HorizontalContentAlignment="Stretch" Margin="0,1,0,1">
+                    <ListBox Name="lb2" HorizontalContentAlignment="Stretch" Margin="0,1,0,1" ItemsSource="{Binding Path=Entries, UpdateSourceTrigger=PropertyChanged}">
 
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -180,25 +180,7 @@
                     <Image x:Name="imgFormula" ></Image>
 
 
-                    <!--<ListView x:Name="lvModels">
-                        <ListView.Resources>
-                            <DataTemplate x:Key="IconTemplate">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" />
-                                    <TextBlock Grid.Column="1" Text="{Binding Name}"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.Resources>
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn CellTemplate="{StaticResource IconTemplate}" Header="Name"/>
-                                <GridViewColumn DisplayMemberBinding="{Binding FileName}" Header="File Name"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>-->
+             
                 </TabItem>
             </TabControl>
 
@@ -217,6 +199,16 @@
 
                    
                 </Grid>
+
+                <Grid x:Name="OverlayEx" Panel.ZIndex="1000" Visibility="Visible" Width="350" Height="350" HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <Grid.Background>
+                        <SolidColorBrush Color="Green" Opacity=".05"/>
+                    </Grid.Background>
+                    <Image x:Name="imgHeaderEx" Opacity=".5"></Image>
+
+
+                </Grid>
+
 
                 <h:HelixViewport3D  ZoomExtentsWhenLoaded="True" x:Name="view"  PanGesture="LeftClick" Background="Black" Margin="0,0,0,0">
                 <h:SunLight/>
