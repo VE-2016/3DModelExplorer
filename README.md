@@ -24,9 +24,9 @@ Open 3dModelExplorer.sln in Visual Studio, build an run.
 
 1. Menu and Toolbar commands
 2. Three panels:
-..1. Imporers with pages
-..2. 3D Model Viewer
-..3. Models page
+   * Imporers with pages
+   * 3D Model Viewer
+   * Models page
 
 # Workflows
 
