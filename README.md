@@ -32,3 +32,5 @@ Selection of the file, displays the 3D model view and saves the model into Model
 3. Entering desired phrase in the search box and pressing Search Model button, displays list of retrieved compounds and particles. 
 After selecting particles names in the 'Search' tab -> models are retrieved and created in the 'Models' tab
 
+![Optional Text](./Resources/3DModelExplorer.png)
+
