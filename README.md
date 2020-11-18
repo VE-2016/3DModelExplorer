@@ -31,6 +31,10 @@ Open 3dModelExplorer.sln in Visual Studio, build an run.
      * Properties - with particles chemical formula
    * 3D Model Viewer
    * Models page
+   
+# Data Sources
+
+Particle chemical formulas and 3D properties are taken by means of REST protocol from service "https://pubchem.ncbi.nlm.nih.gov"
 
 # Workflows
 
