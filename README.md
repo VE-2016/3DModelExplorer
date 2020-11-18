@@ -8,7 +8,13 @@ Program designed to fetching 3D substances formulas, loading, viewing and editin
 
 Retrived 3d formula are converted to .NET classes.
 
-Particles are then visialized in Helix3D library.
+Particles are then visualized in Helix3D library.
 
+# Installation and build
 
+Build Helix3D library from repository.
+
+Copy cuild files into Libraries directory.
+
+Open 3dModelExplorer.sln in Visual Studio, build an run.
 
