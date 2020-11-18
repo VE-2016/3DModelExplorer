@@ -39,7 +39,9 @@ Particle chemical formulas and 3D properties are taken by means of REST protocol
 # Technology
 
 Written in WPF in .NET Framework 4.8
+
 3D library from https://github.com/helix-toolkit/helix-toolkit repository
+
 Rest client from https://github.com/restsharp/RestSharp repository
 
 # Workflows
