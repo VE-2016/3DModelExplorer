@@ -2,11 +2,14 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:h="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf" xmlns:local="clr-namespace:Viewer3D"
+    xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
         
  
     Title="3D Model Explorer" Height="774" Width="1207"
     Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
     Icon="pack://application:,,,/3DModelExplorer;component/Resources/logo.png">
+    <Window.CommandBindings>
+    </Window.CommandBindings>
     <Window.Resources>
 
     </Window.Resources>
@@ -69,13 +72,15 @@
                 <Separator />
             </ToolBar>
             <ToolBar  Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" ToolBar.OverflowMode="Never" ToolBarTray.IsLocked="True" Loaded="ToolBar_Loaded">
-                <Button Content="Grid X"  Click="XGrid_Click"/>
-                <Button Content="Grid Y" Click="YGrid_Click"/>
-                <Button Content="Grid Z" Click="ZGrid_Click"/>
+                <Button Content="Grid X"  Click="XGrid_Click" IsEnabled="{Binding ViewerMode}"  />
+                <Button Content="Grid Y" Click="YGrid_Click" IsEnabled="{Binding ViewerMode}" />
+                <Button Content="Grid Z" Click="ZGrid_Click" IsEnabled="{Binding ViewerMode}"/>
                 <Separator />
-                <Button Content="Show Grids" Click="GridVisible_Click" />
-                <Button Content="Hide Grids" Click="GridInvisible_Click"/>
-                <Button Content="New" x:Name="tbNew" Click="tbNew_Click"/>
+                <Button Content="Show Grids" Click="GridVisible_Click" IsEnabled="{Binding ViewerMode}" />
+                <Button Content="Hide Grids" Click="GridInvisible_Click" IsEnabled="{Binding ViewerMode}"/>
+                <Button Content="New" x:Name="tbNew" Click="tbNew_Click" IsEnabled="{Binding ViewerMode}"/>
+                <Separator />
+                <Button Content="Browser Mode" x:Name="tbPropertie" Click="tbPropertie_Click"/>
             </ToolBar>
         </ToolBarTray>
         <Grid x:Name="plImporters" Margin="0,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" DockPanel.Dock="Top">
@@ -104,9 +109,9 @@
                 <!--<Button Width="300" Height="20" Grid.Column="0" BorderThickness="0,0,0,0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Click="Button_PreviewMouseLeftButtonDown_3">Search</Button>-->
 
                 <TextBox  x:Name="tbSearch"    Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="0"
-                             Height="25" IsReadOnly="False" KeyDown="TextBox_KeyDown">Aspirin</TextBox>
+                             Height="25" IsReadOnly="False" KeyDown="TextBox_KeyDown">Vitamin A</TextBox>
 
-                <Button x:Name="btnSaveModel" Width="300" Height="20" BorderThickness="0,0,0,0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Grid.Column="1" Click="Button_Search">Seach Model</Button>
+                <Button x:Name="btnSaveModel" Width="300" Height="20" BorderThickness="0,0,0,0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Grid.Column="1" Click="Button_Search">Search Model</Button>
 
 
             </Grid>
@@ -129,11 +134,17 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="0" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Title}" Foreground="Black" />
+                                    <TextBlock Text="{Binding Name}" Foreground="Black" />
 
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Remove from Loaded - XML" x:Name="cmRemoveLoaded"  KeyUp="cmRemoveLoaded_KeyDown" />
+                                
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
                     </ListBox>
 
                 </TabItem>
@@ -177,7 +188,42 @@
 
                 <TabItem Header="Properties" x:Name="tbProperties">
 
-                    <Image x:Name="imgFormula" ></Image>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Image x:Name="imgFormula" Grid.Row="0" ></Image>
+                        <GridSplitter Grid.Row="1" Height="5" VerticalAlignment="Stretch" />
+                        <ListView Margin="0" Name="lvProps" Grid.Row="2" ItemsSource="{Binding Path=PropEntries, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Right" SelectionChanged="lvProps_SelectionChanged">
+
+                            <ListView.View >
+                                <GridView>
+                                    <GridView.ColumnHeaderContainerStyle>
+                                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </GridView.ColumnHeaderContainerStyle>
+
+                                    <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Name}">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name}" TextAlignment="Right" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Property" Width="50" DisplayMemberBinding="{Binding Properties}"  />
+                                   
+                                   
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+
+
+                   
 
 
              
@@ -189,7 +235,32 @@
 
             </StackPanel>
 
-            <Grid Grid.Column="2" Grid.Row="1">
+            <Grid x:Name="grBrowser"  Grid.Column="2" Grid.Row="1" Visibility="Collapsed">
+
+             
+                <DockPanel Visibility="Collapsed" x:Name="tbBrowser">
+                    <ToolBar DockPanel.Dock="Top">
+                        <Button x:Name="btnBack" Click="btnBack_Click">
+                            <Image Source="pack://application:,,,/3DModelExplorer;component/Resources/backward.png" Width="16" Height="16" />
+                        </Button>
+                        <Button x:Name="btnForward" Click="btnForward_Click">
+                            <Image Source="pack://application:,,,/3DModelExplorer;component/Resources/forward.png" Width="16" Height="16" />
+                        </Button>
+                        <Separator />
+                        <TextBox Name="txtUrl" Width="300" KeyUp="txtUrl_KeyUp" />
+                        <Button Command="NavigationCommands.GoToPage">
+                            <Image Source="pack://application:,,,/3DModelExplorer;component/Resources/forward.png" Width="16" Height="16" />
+                        </Button>
+                    </ToolBar>
+                   
+                    <wpf:ChromiumWebBrowser x:Name="Browser"/>
+                </DockPanel>
+
+              
+
+            </Grid>
+            
+            <Grid x:Name="grViewer3D" Grid.Column="2" Grid.Row="1">
 
                 <Grid x:Name="Overlay" Panel.ZIndex="1000" Visibility="Visible" Width="350" Height="60" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Grid.Background>
@@ -291,6 +362,35 @@
                     </Grid>
 
                 </TabItem>
+
+                <TabItem Header="Browse" x:Name="tbBrowse" Visibility="Collapsed">
+
+                    <ListBox Name="lbBrowse" HorizontalContentAlignment="Stretch" Margin="0,0,0,0" ItemsSource="{Binding Path=PagesEntries, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="lbBrowse_SelectionChanged">
+
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+
+                                <Grid Margin="0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="10" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Path=title}" Foreground="Black"/>
+
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                </TabItem>
+                
+                
             </TabControl>
             <StatusBar DockPanel.Dock="Bottom" Grid.ColumnSpan="5" Height="30" Grid.Row="2">
                 <StatusBarItem>

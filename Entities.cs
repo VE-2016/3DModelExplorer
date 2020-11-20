@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
@@ -309,39 +310,39 @@ namespace ModelExplorer
         /// <summary>
         /// 
         /// </summary>
-        public int Complexity { get; set; }
+        public double Complexity { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int Charge { get; set; }
+        public double Charge { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int HBondDonorCount { get; set; }
+        public double HBondDonorCount { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int HBondAcceptorCount { get; set; }
+        public double HBondAcceptorCount { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int RotatableBondCount { get; set; }
+        public double RotatableBondCount { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int HeavyAtomCount { get; set; }
+        public double HeavyAtomCount { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int IsotopeAtomCount { get; set; }
+        public double IsotopeAtomCount { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int AtomStereoCount { get; set; }
+        public double AtomStereoCount { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int DefinedAtomStereoCount { get; set; }
+        public double DefinedAtomStereoCount { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -349,11 +350,11 @@ namespace ModelExplorer
         /// <summary>
         /// 
         /// </summary>
-        public int BondStereoCount { get; set; }
+        public double BondStereoCount { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int DefinedBondStereoCount { get; set; }
+        public double DefinedBondStereoCount { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -361,11 +362,11 @@ namespace ModelExplorer
         /// <summary>
         /// 
         /// </summary>
-        public int CovalentUnitCount { get; set; }
+        public double CovalentUnitCount { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int Volume3D { get; set; }
+        public double Volume3D { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -381,27 +382,27 @@ namespace ModelExplorer
         /// <summary>
         /// 
         /// </summary>
-        public int FeatureCount3D { get; set; }
+        public double FeatureCount3D { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int FeatureAcceptorCount3D { get; set; }
+        public double FeatureAcceptorCount3D { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int FeatureDonorCount3D { get; set; }
+        public double FeatureDonorCount3D { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int FeatureAnionCount3D { get; set; }
+        public double FeatureAnionCount3D { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int FeatureCationCount3D { get; set; }
+        public double FeatureCationCount3D { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int FeatureRingCount3D { get; set; }
+        public double FeatureRingCount3D { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -413,11 +414,11 @@ namespace ModelExplorer
         /// <summary>
         /// 
         /// </summary>
-        public int EffectiveRotorCount3D { get; set; }
+        public double EffectiveRotorCount3D { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int ConformerCount3D { get; set; }
+        public double ConformerCount3D { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -465,6 +466,24 @@ namespace ModelExplorer
 
     public class DataEx
     {
+
+        static public Arxiv Arxiv(string name)
+        {
+
+            var client = new RestClient("http://export.arxiv.org/api");
+            var request = new RestRequest("http://export.arxiv.org/api/query?search_query=all:" + name + "&profile=fuzzy", Method.GET);
+            var response = client.Execute(request);
+            var content = response.Content;
+
+            Arxiv pages = JsonConvert.DeserializeObject<Arxiv>(content);
+
+
+            return pages;
+
+
+            //   http://export.arxiv.org/api/query?search_query=all:electron&start=0&max_results=1
+        }
+
         static public AtomsTable LoadAtoms()
         {
 
@@ -475,6 +494,39 @@ namespace ModelExplorer
             return r.AtomsTable;
         }
 
+        static public List<string> Words(string name)
+        {
+
+            List<string> words = new List<string>();
+            string[] separators = new string[] { ",", ".", "!", "\'", " ", "\'s" };
+
+
+            foreach (string word in name.Split(separators, StringSplitOptions.RemoveEmptyEntries))
+                words.Add(word);
+
+            return words;
+        }
+        static public BrowserPages GetBrowserPagesForName(string name)
+        {
+            List<string> words = Words(name);
+
+
+            name = words.Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur);
+
+            var client = new RestClient("https://en.wikipedia.org/w/rest.php");
+            var request = new RestRequest("https://en.wikipedia.org/w/rest.php/v1/search/page?q=" + name + "&profile=fuzzy", Method.GET);
+            var response = client.Execute(request);
+            var content = response.Content;
+
+            BrowserPages pages = JsonConvert.DeserializeObject<BrowserPages>(content);
+
+            if (pages == null)
+                pages = new BrowserPages();
+
+
+            return pages;
+
+        }
 
         static public string GetContentForName(string name)
         {
@@ -494,31 +546,31 @@ namespace ModelExplorer
 
             var request = new RestRequest("https://pubchem.ncbi.nlm.nih.gov/rest/autocomplete/compound/" + name + "/json?limit=60000", Method.POST);
             var response = client.Execute(request);
-            var content = response.Content; // raw content as 
-                                            // richTextBox1.Text = content;
-
+            var content = response.Content;
 
             AutoComplete autos = JsonConvert.DeserializeObject<AutoComplete>(content);
 
-            // https://pubchem.ncbi.nlm.nih.gov/rest/autocomplete/compound/aspirin/jsonp?limit=6
+            if (autos == null)
+                autos = new AutoComplete();
 
 
             return autos;
 
         }
 
-        public PropertyTable Description(string name)
+        static public PropertyTable Description(string name)
         {
 
             var client = new RestClient("https://pubchem.ncbi.nlm.nih.gov");
 
             var request = new RestRequest("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/" + name + "/property/MolecularFormula,MolecularWeight,CanonicalSMILES,IsomericSMILES,InChI,InChIKey,IUPACName,XLogP,ExactMass,MonoisotopicMass,TPSA,Complexity,Charge,HBondDonorCount,HBondAcceptorCount,RotatableBondCount,HeavyAtomCount,IsotopeAtomCount,AtomStereoCount,DefinedAtomStereoCount,UndefinedAtomStereoCount,BondStereoCount,DefinedBondStereoCount,UndefinedBondStereoCount,CovalentUnitCount,Volume3D,XStericQuadrupole3D,YStericQuadrupole3D,ZStericQuadrupole3D,FeatureCount3D,FeatureAcceptorCount3D,FeatureDonorCount3D,FeatureAnionCount3D,FeatureCationCount3D,FeatureRingCount3D,FeatureHydrophobeCount3D,ConformerModelRMSD3D,EffectiveRotorCount3D,ConformerCount3D,Fingerprint2D/JSON", Method.POST);
             var response = client.Execute(request);
-            var content = response.Content; // raw content as 
-                                            // richTextBox1.Text = content;
-
+            var content = response.Content;
 
             Root props = JsonConvert.DeserializeObject<Root>(content);
+
+            if (props == null)
+                props = new Root();
 
             //https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/1,2,3,4,5/property/MolecularFormula,MolecularWeight,CanonicalSMILES,IsomericSMILES,InChI,InChIKey,IUPACName,XLogP,ExactMass,MonoisotopicMass,TPSA,Complexity,Charge,HBondDonorCount,HBondAcceptorCount,RotatableBondCount,HeavyAtomCount,IsotopeAtomCount,AtomStereoCount,DefinedAtomStereoCount,UndefinedAtomStereoCount,BondStereoCount,DefinedBondStereoCount,UndefinedBondStereoCount,CovalentUnitCount,Volume3D,XStericQuadrupole3D,YStericQuadrupole3D,ZStericQuadrupole3D,FeatureCount3D,FeatureAcceptorCount3D,FeatureDonorCount3D,FeatureAnionCount3D,FeatureCationCount3D,FeatureRingCount3D,FeatureHydrophobeCount3D,ConformerModelRMSD3D,EffectiveRotorCount3D,ConformerCount3D,Fingerprint2D/json";
 
@@ -563,18 +615,6 @@ namespace ModelExplorer
             //byte[] bbytes = ImageToBytes(bb);
 
             BitmapImage b1 = null;
-
-            //BitmapImage b2 = null;
-
-            //try
-            //{
-
-            //    b1 = GetBitmapImage(bbytes);
-
-
-            //}
-            //catch (Exception ex) { };
-
 
             try
             {
@@ -695,7 +735,6 @@ namespace ModelExplorer
 
             var client = new RestClient("https://pubchem.ncbi.nlm.nih.gov");
 
-            //?record_type = 3d
             var request = new RestRequest("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/" + name + "/XML?record_type=3d", Method.POST);
             var response = client.Execute(request);
             var content = response.Content;
@@ -735,9 +774,7 @@ namespace ModelExplorer
 
             return (content, c);
 
-
         }
-
 
         public static List<List<double>> GetData()
         {
@@ -1040,12 +1077,6 @@ namespace ModelExplorer
             // Create graphic object that will draw onto the bitmap
             Graphics g = Graphics.FromImage(bmp);
 
-            // ------------------------------------------
-            // Ensure the best possible quality rendering
-            // ------------------------------------------
-            // The smoothing mode specifies whether lines, curves, and the edges of filled areas use smoothing (also called antialiasing). 
-            // One exception is that path gradient brushes do not obey the smoothing mode. 
-            // Areas filled using a PathGradientBrush are rendered the same way (aliased) regardless of the SmoothingMode property.
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
             // The interpolation mode determines how intermediate values between two endpoints are calculated.
@@ -1084,9 +1115,7 @@ namespace ModelExplorer
 
                 return GetBitmapImage(bytes);
 
-
             }
-
 
         }
 
@@ -1127,4 +1156,170 @@ namespace ModelExplorer
             }
         }
     }
+
+    public class PropEx
+    {
+        public string Name { get; set; }
+
+        public string Properties { get; set; }
+
+        public string Ex { get; set; }
+
+    }
+
+    public class Thumbnail
+    {
+        public string mimetype { get; set; }
+        public int? size { get; set; }
+        public int? width { get; set; }
+        public int? height { get; set; }
+        public List<string> duration { get; set; }
+        public string url { get; set; }
+
+        public Thumbnail()
+        {
+            duration = new List<string>();
+        }
+
+    }
+    public class Pages
+    {
+        public int id { get; set; }
+        public string key { get; set; }
+        public string title { get; set; }
+        public string excerpt { get; set; }
+        public string description { get; set; }
+
+        public Thumbnail thumb = null;
+        public Thumbnail thumbnail
+        {
+            get
+            {
+
+                if (thumb == null)
+                {
+                    thumb = new Thumbnail();
+                }
+
+                return thumb;
+            }
+
+            set
+            {
+
+
+                thumb = value;
+
+            }
+        }
+
+    }
+    public class BrowserPages
+    {
+        public List<Pages> pages { get; set; }
+
+
+        public BrowserPages()
+        {
+            pages = new List<Pages>();
+        }
+
+    }
+
+    public partial class Arxiv
+    {
+        [JsonProperty("link")]
+        public Link Link { get; set; }
+
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
+        [JsonProperty("id")]
+        public Uri Id { get; set; }
+
+        [JsonProperty("updated")]
+        public DateTimeOffset Updated { get; set; }
+
+        [JsonProperty("totalResults")]
+        //[JsonConverter(typeof(ParseStringConverter))]
+        public long TotalResults { get; set; }
+
+        [JsonProperty("startIndex")]
+        //[JsonConverter(typeof(ParseStringConverter))]
+        public long StartIndex { get; set; }
+
+        [JsonProperty("itemsPerPage")]
+        //[JsonConverter(typeof(ParseStringConverter))]
+        public long ItemsPerPage { get; set; }
+
+        [JsonProperty("entry")]
+        public List<Entry> Entry { get; set; }
+    }
+
+    public partial class Entry
+    {
+        [JsonProperty("id")]
+        public Uri Id { get; set; }
+
+        [JsonProperty("published")]
+        public DateTimeOffset Published { get; set; }
+
+        [JsonProperty("updated")]
+        public DateTimeOffset Updated { get; set; }
+
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
+        [JsonProperty("summary")]
+        public string Summary { get; set; }
+
+        [JsonProperty("author")]
+        public Author Author { get; set; }
+
+        [JsonProperty("comment")]
+        public string Comment { get; set; }
+
+        [JsonProperty("journal_ref")]
+        public string JournalRef { get; set; }
+
+        [JsonProperty("link")]
+        public Link[] Link { get; set; }
+
+        [JsonProperty("primary_category")]
+        public Category PrimaryCategory { get; set; }
+
+        [JsonProperty("category")]
+        public Category Category { get; set; }
+    }
+
+    public partial class Author
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+    }
+
+    public partial class Category
+    {
+        [JsonProperty("@term")]
+        public string Term { get; set; }
+
+        [JsonProperty("@scheme")]
+        public Uri Scheme { get; set; }
+    }
+
+    public partial class Link
+    {
+        [JsonProperty("@href")]
+        public Uri Href { get; set; }
+
+        [JsonProperty("@rel")]
+        public string Rel { get; set; }
+
+        [JsonProperty("@type")]
+        public string Type { get; set; }
+
+        [JsonProperty("@title", NullValueHandling = NullValueHandling.Ignore)]
+        public string Title { get; set; }
+    }
+
 }

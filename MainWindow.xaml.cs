@@ -6,8 +6,10 @@ namespace Viewer3D
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Threading.Tasks;
@@ -16,6 +18,7 @@ namespace Viewer3D
     using System.Windows.Input;
     using System.Windows.Media.Imaging;
     using System.Windows.Media.Media3D;
+    using System.Windows.Threading;
     using Exporters = ModelExplorer.Exporters;
 
     public partial class MainWindow
@@ -32,6 +35,7 @@ namespace Viewer3D
 
         DataContext dataContext = new DataContext();
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
@@ -43,27 +47,19 @@ namespace Viewer3D
 
             this.DataContext = dataContext;
 
-            //var c = DataEx.GetData();
 
             tbModels.IsSelected = true;
 
             var f = AppDomain.CurrentDomain.BaseDirectory;
 
-            //Uri iconUri = new Uri(f + "logo.png", UriKind.RelativeOrAbsolute);
-            //this.Icon = BitmapFrame.Create(iconUri);
-
-            //this.DataContext = this;
-
-            //vpViewPort.Source = BitmapFrame.Create(iconUri);
-
-            List<Item> items = new List<Item>();
+            List<XML_Item> items = new List<XML_Item>();
             lb.ItemsSource = items;
 
             var files = new DirectoryInfo(fileFolder).GetFiles();
             foreach (var df in files)
             {
-                Item dg = new Item();
-                dg.Title = df.Name;
+                XML_Item dg = new XML_Item();
+                dg.Name = df.Name;
                 items.Add(dg);
             }
             lb.SelectionChanged += Lb_SelectionChanged;
@@ -80,19 +76,21 @@ namespace Viewer3D
 
             LoadTreeView();
 
-            return;
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += timer_Tick;
+            timer.Start();
 
-            //int result = File.ReadLines(filePath).Count(line => line.StartsWith(word));
-            //List<Item> items = new List<Item>();
-            //string  file = AppDomain.CurrentDomain.BaseDirectory + "Files\\" + "CID-Synonym-unfiltered";
-            //string []content = File.ReadAllLines(file);
-            //foreach(string s in content)
-            //{
-            //    Item d = new Item();
-            //    d.Title = s;
-            //    items.Add(d);
-            //}
-            //lb.ItemsSource = items;
+
+        }
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+            if (dataContext.queue.Count <= 0)
+                return;
+            string obs = (string)dataContext.queue.Dequeue();
+
+            LoadProperties(obs);
         }
 
         void LoadTreeView()
@@ -205,10 +203,10 @@ namespace Viewer3D
             int i = lb.SelectedIndex;
             if (i < 0)
                 return;
-            Item d = lb.Items[i] as Item;
+            XML_Item d = lb.Items[i] as XML_Item;
             if (d == null)
                 return;
-            string file = fileFolder + "\\" + d.Title;
+            string file = fileFolder + "\\" + d.Name;
 
             var c = DataEx.GetData(file);
 
@@ -291,6 +289,57 @@ namespace Viewer3D
             BitmapSource b = DataEx.TextToBitmap(namenoext);
 
             imgHeader.Source = b;
+        }
+
+        string ModelName()
+        {
+            if (lvModels2.SelectedItem == null)
+                return "";
+            FolderEx item = (FolderEx)lvModels2.SelectedItem;
+
+            if (item == null)
+                return "";
+
+            return Path.GetFileNameWithoutExtension(item.Name);
+        }
+
+        void LoadProperties(string name = "")
+        {
+
+            var entries = dataContext.PropEntries;
+
+            entries.Clear();
+
+            if (string.IsNullOrEmpty(name))
+
+                name = ModelName();
+
+            if (string.IsNullOrEmpty(name))
+                return;
+
+            var c = DataEx.Description(name);
+
+            if (c == null)
+                return;
+
+            foreach (PropertiesItem pp in c.Properties)
+            {
+                object obj = pp;
+                PropertyInfo[] properties = obj.GetType().GetProperties();
+                foreach (var p in properties)
+                {
+                    var v = p.GetValue(obj);
+
+                    PropEx s = new PropEx();
+
+                    s.Name = p.Name;
+
+                    s.Properties = Convert.ToString(v);
+
+                    entries.Add(s);
+                }
+            }
+
         }
 
         private void LoadFromXml(string file)
@@ -397,10 +446,10 @@ namespace Viewer3D
             int i = lb2.SelectedIndex;
             if (i < 0)
                 return;
-            Item d = lb2.Items[i] as Item;
+            XML_Item d = lb2.Items[i] as XML_Item;
             if (d == null)
                 return;
-            string name = d.Title;
+            string name = d.Name;
 
             var (content, c) = DataEx.GetRawData(name);
 
@@ -586,10 +635,10 @@ namespace Viewer3D
             int i = lb2.SelectedIndex;
             if (i < 0)
                 return;
-            Item d = lb2.Items[i] as Item;
+            XML_Item d = lb2.Items[i] as XML_Item;
             if (d == null)
                 return;
-            string name = d.Title;
+            string name = d.Name;
 
             var (content, c) = DataEx.GetRawData(name);
 
@@ -728,36 +777,84 @@ namespace Viewer3D
         {
             if (e.Key == Key.Return)
             {
-                tbSearch.Text = "You Entered: " + tbSearch.Text;
+                Search();
             }
         }
 
 
-        //ObservableCollection<Item> entries = new ObservableCollection<Item>();
+        //ObservableCollection<XML_Item> entries = new ObservableCollection<XML_Item>();
 
         private void Button_Search(object sender, RoutedEventArgs e)
         {
-            AutoComplete autos = DataEx.Autocomplete(tbSearch.Text);
 
-            List<Item> items = new List<Item>();
+            if (dataContext.ViewerMode == false)
+            {
 
-            //var collection = new ObservableCollection<Item>();
+                if (string.IsNullOrEmpty(tbSearch.Text))
+                    return;
+                SearchBrowser(tbSearch.Text);
+                return;
+            }
+
 
             dataContext.Entries.Clear();
 
+            AutoComplete autos = DataEx.Autocomplete(tbSearch.Text);
 
-            var files = new DirectoryInfo(fileFolder).GetFiles();
-            foreach (var df in autos.dictionary_terms.compound)
+            List<XML_Item> items = new List<XML_Item>();
+
+            if (autos != null)
             {
-                Item dg = new Item();
-                dg.Title = df;
-                items.Add(dg);
 
-                dataContext.Entries.Add(dg);
+                var files = new DirectoryInfo(fileFolder).GetFiles();
+                foreach (var df in autos.dictionary_terms.compound)
+                {
+                    XML_Item dg = new XML_Item();
+                    dg.Name = df;
+                    items.Add(dg);
+
+                    dataContext.Entries.Add(dg);
+
+                }
 
             }
 
-            //lb2.ItemsSource = items;
+            tpSearch.IsSelected = true;
+        }
+
+        void Search()
+        {
+            if (dataContext.ViewerMode == false)
+            {
+
+                if (string.IsNullOrEmpty(tbSearch.Text))
+                    return;
+                SearchBrowser(tbSearch.Text);
+                return;
+            }
+
+
+            dataContext.Entries.Clear();
+
+            AutoComplete autos = DataEx.Autocomplete(tbSearch.Text);
+
+            List<XML_Item> items = new List<XML_Item>();
+
+            if (autos != null)
+            {
+
+                var files = new DirectoryInfo(fileFolder).GetFiles();
+                foreach (var df in autos.dictionary_terms.compound)
+                {
+                    XML_Item dg = new XML_Item();
+                    dg.Name = df;
+                    items.Add(dg);
+
+                    dataContext.Entries.Add(dg);
+
+                }
+
+            }
 
             tpSearch.IsSelected = true;
         }
@@ -870,6 +967,8 @@ namespace Viewer3D
         private void lvModel2_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+            tbProperties.IsSelected = true;
+
             ArrayList m = new ArrayList();
 
             foreach (var c in view.Viewport.Children)
@@ -927,6 +1026,7 @@ namespace Viewer3D
 
             }
 
+
             string name = Path.GetFileName(file);
 
             string namenoext = Path.GetFileNameWithoutExtension(file);
@@ -942,6 +1042,13 @@ namespace Viewer3D
             imgHeaderEx.Source = image;
 
             imgFormula.Source = image;
+
+            //if (dataContext.queue.Count > 0)
+            {
+                dataContext.queue.Clear();
+
+                dataContext.queue.Enqueue(namenoext);
+            }
 
 
 
@@ -1290,10 +1397,113 @@ namespace Viewer3D
 
 
         }
+
+        private void tbPropertie_Click(object sender, RoutedEventArgs e)
+        {
+            if (grViewer3D.Visibility != Visibility.Collapsed)
+            {
+                dataContext.ViewerMode = false;
+                //tbModels.IsSelected = true;
+                tbProperties.IsSelected = true;
+                grViewer3D.Visibility = Visibility.Collapsed;
+                tbBrowser.Visibility = Visibility.Visible;
+                tbBrowse.Visibility = Visibility.Visible;
+                tbModels.Visibility = Visibility.Collapsed;
+                tbBrowse.IsSelected = true;
+                grBrowser.Visibility = Visibility.Visible;
+                tbPropertie.Content = "Browser Mode";
+                btnSaveModel.Content = "Search Browse";
+                //lvProps.Visibility = Visibility.Collapsed;
+
+                //Browser.Address = "https://github.com/VE-2016/3DModelExplorer";
+
+                //wbSample.Navigate("https://github.com/VE-2016/3DModelExplorer");
+
+                //LoadProperties();
+
+            }
+            else
+            {
+                dataContext.ViewerMode = true;
+                tbBrowse.Visibility = Visibility.Collapsed;
+                tbModels.Visibility = Visibility.Visible;
+                tbModels.IsSelected = true;
+                tbBrowse.IsSelected = false;
+
+                grBrowser.Visibility = Visibility.Collapsed;
+                grViewer3D.Visibility = Visibility.Visible;
+                tbBrowser.Visibility = Visibility.Visible;
+                tbPropertie.Content = "3D Viewer Mode";
+                btnSaveModel.Content = "Search Model";
+
+            }
+        }
+
+        private void txtUrl_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                Browser.Address = txtUrl.Text;
+        }
+
+        private void lvProps_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+
+        }
+
+        void SearchBrowser(string name)
+        {
+            var c = DataEx.GetBrowserPagesForName(name);
+
+            foreach (Pages b in c.pages)
+            {
+                dataContext.PagesEntries.Add(b);
+            }
+        }
+
+        private void lbBrowse_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Pages pages = (Pages)lbBrowse.SelectedItem;
+            if (pages == null)
+                return;
+
+            txtUrl.Text = "https://en.wikipedia.org/wiki/" + pages.title;
+
+            Browser.Address = "https://en.wikipedia.org/wiki/" + pages.title;
+        }
+
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            Browser.BackCommand.Execute(new object());
+        }
+
+        private void btnForward_Click(object sender, RoutedEventArgs e)
+        {
+            Browser.ForwardCommand.Execute(new object());
+        }
+
+
+
+        private void cmRemoveLoaded_KeyDown(object sender, KeyEventArgs e)
+        {
+            XML_Item v = (XML_Item)lb.SelectedItem;
+
+            if (v == null)
+                return;
+
+            string f = AppDomain.CurrentDomain.BaseDirectory + "Files\\Content" + v.Name;
+
+            if (File.Exists(f))
+            {
+                File.Delete(f);
+
+                lb.Items.Remove(v);
+            }
+        }
     }
-    public class Item
+    public class XML_Item
     {
-        public string Title { get; set; }
+        public string Name { get; set; }
         public int Completion { get; set; }
         public Compound compound { get; set; }
     }
@@ -1348,17 +1558,8 @@ namespace Viewer3D
             this.atom = atom;
             this.sphereSize = sphereSize;
             GeometryModel3D model = null;
-            //MeshBuilder builder = new MeshBuilder();
-            //if (mesh == null)
-            //{
-            //    builder.AddSphere(new Point3D(), sphereSize, 64, 64);
-
-            //    model = new GeometryModel3D(builder.ToMesh(), atom.Material());
-            //}
-            //else model = new GeometryModel3D(mesh, atom.Material());
 
             model = mf(atom);
-
 
             var c = MainWindow.atomsTable.atoms.Where(s => s.Element.ToLower() == atom.descriptor.ShortName).ToList();
 
@@ -1761,15 +1962,48 @@ namespace Viewer3D
         public ObservableCollection<DomainItem> Items { get; set; }
     }
 
-    public class DataContext
+    public class DataContext : INotifyPropertyChanged
     {
-        public ObservableCollection<Item> Entries { get; private set; }
 
+        public bool viewerMode = true;
+
+        public bool ViewerMode
+        {
+            get { return viewerMode; }
+            set
+            {
+                viewerMode = value;
+                UpdateProperty("ViewerMode");
+            }
+        }
+
+
+        public Queue queue = new Queue();
+
+        public ObservableCollection<XML_Item> Entries { get; private set; }
+
+        public ObservableCollection<PropEx> PropEntries { get; private set; }
+
+        public ObservableCollection<Pages> PagesEntries { get; private set; }
 
         public DataContext()
         {
-            Entries = new ObservableCollection<Item>();
+            Entries = new ObservableCollection<XML_Item>();
 
+            PropEntries = new ObservableCollection<PropEx>();
+
+            PagesEntries = new ObservableCollection<Pages>();
+
+            ViewerMode = true;
+
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void UpdateProperty(string name)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
 
 

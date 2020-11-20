@@ -1,4 +1,8 @@
 ﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\CefSharp.Wpf.85.3.130\build\CefSharp.Wpf.props" Condition="Exists('packages\CefSharp.Wpf.85.3.130\build\CefSharp.Wpf.props')" />
+  <Import Project="packages\CefSharp.Common.85.3.130\build\CefSharp.Common.props" Condition="Exists('packages\CefSharp.Common.85.3.130\build\CefSharp.Common.props')" />
+  <Import Project="packages\cef.redist.x86.85.3.13\build\cef.redist.x86.props" Condition="Exists('packages\cef.redist.x86.85.3.13\build\cef.redist.x86.props')" />
+  <Import Project="packages\cef.redist.x64.85.3.13\build\cef.redist.x64.props" Condition="Exists('packages\cef.redist.x64.85.3.13\build\cef.redist.x64.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -10,6 +14,8 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -84,31 +90,18 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
-    <Reference Include="Xceed.Wpf.AvalonDock, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>packages\Extended.Wpf.Toolkit.4.0.1\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>packages\Extended.Wpf.Toolkit.4.0.1\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>packages\Extended.Wpf.Toolkit.4.0.1\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>packages\Extended.Wpf.Toolkit.4.0.1\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.Toolkit, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>packages\Extended.Wpf.Toolkit.4.0.1\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs" />
     <Compile Include="Entities.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -129,18 +122,36 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\PrintPreviewTwoPages_16x.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    <Folder Include="Properties\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\3DModelExplorer.png" />
+    <Resource Include="Resources\Backwards_16x.png" />
     <Resource Include="Resources\DebugCheckedTests_16x.png" />
+    <Resource Include="Resources\logo.png" />
+    <Resource Include="Resources\PrintPreviewTwoPages_16x.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\logo.png" />
+    <Resource Include="Resources\backward.png" />
+    <Resource Include="Resources\forward.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>
     <VisualStudio AllowExistingFolder="true" />
   </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\cef.redist.x64.85.3.13\build\cef.redist.x64.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\cef.redist.x64.85.3.13\build\cef.redist.x64.props'))" />
+    <Error Condition="!Exists('packages\cef.redist.x86.85.3.13\build\cef.redist.x86.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\cef.redist.x86.85.3.13\build\cef.redist.x86.props'))" />
+    <Error Condition="!Exists('packages\CefSharp.Common.85.3.130\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Common.85.3.130\build\CefSharp.Common.props'))" />
+    <Error Condition="!Exists('packages\CefSharp.Common.85.3.130\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Common.85.3.130\build\CefSharp.Common.targets'))" />
+    <Error Condition="!Exists('packages\CefSharp.Wpf.85.3.130\build\CefSharp.Wpf.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Wpf.85.3.130\build\CefSharp.Wpf.props'))" />
+    <Error Condition="!Exists('packages\CefSharp.Wpf.85.3.130\build\CefSharp.Wpf.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Wpf.85.3.130\build\CefSharp.Wpf.targets'))" />
+  </Target>
+  <Import Project="packages\CefSharp.Common.85.3.130\build\CefSharp.Common.targets" Condition="Exists('packages\CefSharp.Common.85.3.130\build\CefSharp.Common.targets')" />
+  <Import Project="packages\CefSharp.Wpf.85.3.130\build\CefSharp.Wpf.targets" Condition="Exists('packages\CefSharp.Wpf.85.3.130\build\CefSharp.Wpf.targets')" />
 </Project>
