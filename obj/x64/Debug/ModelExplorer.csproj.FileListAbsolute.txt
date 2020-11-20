@@ -166,7 +166,6 @@ D:\3DModelExplorer-Github\bin\x64\Debug\HelixToolkit.Wpf.pdb
 D:\3DModelExplorer-Github\bin\x64\Debug\HelixToolkit.Wpf.Input.pdb
 D:\3DModelExplorer-Github\bin\x64\Debug\Newtonsoft.Json.xml
 D:\3DModelExplorer-Github\bin\x64\Debug\RestSharp.xml
-D:\3DModelExplorer-Github\obj\x64\Debug\ModelExplorer.csprojAssemblyReference.cache
 D:\3DModelExplorer-Github\obj\x64\Debug\MainWindow.g.cs
 D:\3DModelExplorer-Github\obj\x64\Debug\App.g.cs
 D:\3DModelExplorer-Github\obj\x64\Debug\GeneratedInternalTypeHelper.g.cs
