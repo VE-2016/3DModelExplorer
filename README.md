@@ -26,7 +26,7 @@ Build Helix3D library from repository.
 
 Copy build files into Libraries directory.
 
-Open 3dModelExplorer.sln in Visual Studio, build an run.
+Open ModelExplorer.sln in Visual Studio, Restore NuGet packages, build an run.
 
 # User Interface
 
