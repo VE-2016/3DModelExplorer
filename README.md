@@ -49,7 +49,7 @@ Written in WPF in .NET Framework 4.8
 
 Rest client from https://github.com/restsharp/RestSharp repository
 
-Chromium CefSharp for WPF
+Chromium Sharp for WPF from https://github.com/cefsharp/CefSharp
 
 # Workflows
 The Model Explorer runs in Viewer Mode and Browser Mode.
