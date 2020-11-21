@@ -49,7 +49,12 @@ Written in WPF in .NET Framework 4.8
 
 Rest client from https://github.com/restsharp/RestSharp repository
 
+Chromium CefSharp for WPF
+
 # Workflows
+The Model Explorer runs in Viewer Mode and Browser Mode.
+
+## Viewer Mode
 
 There are three main ways to explore 3D particle views.
 
@@ -62,4 +67,14 @@ Selection of the file, displays the 3D model view and saves the model into Model
 After selecting particles names in the 'Search' tab -> models are retrieved and created in the 'Models' tab
 
 ![Main Application View](./Resources/3DModelExplorer.png)
+
+
+## Browser Mode
+
+Model Explorer has functionality to search for particle information from Wikipedia pages when switched to Browser Mode. After enetering search text in 'Search box' and pressing 'Search Browser' - all retrieved linkt to relevent Wikipedia pages are displayed in Browser tab. After selecting the position, it is displayed in the Browser control.
+
+![Main Application View](./Resources/ViewerMode.png)
+
+
+
 
