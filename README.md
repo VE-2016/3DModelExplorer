@@ -1,5 +1,8 @@
 # 3D Model Explorer
 
+![Main Application Logo](./Resources/3DModelExplorer-logo.png)
+
+
 [![Build status](https://ci.appveyor.com/api/projects/status/q6ym9afty1nqm1qg?svg=true)](https://ci.appveyor.com/project/VE-2016/3dmodelexplorer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -66,14 +69,14 @@ Selection of the file, displays the 3D model view and saves the model into Model
 3. Entering desired phrase in the search box and pressing Search Model button, displays list of retrieved compounds and particles. 
 After selecting particles names in the 'Search' tab -> models are retrieved and created in the 'Models' tab
 
-![Main Application View](./Resources/3DModelExplorer.png)
+![Main Application ViewerMode](./Resources/3DModelExplorer.png)
 
 
 ## Browser Mode
 
 Model Explorer has functionality to search for particle information from Wikipedia pages when switched to Browser Mode. After enetering search text in 'Search box' and pressing 'Search Browser' - all retrieved linkt to relevent Wikipedia pages are displayed in Browser tab. After selecting the position, it is displayed in the Browser control.
 
-![Main Application View](./Resources/BrowserMode.png)
+![Main Application BrowserMode](./Resources/BrowserMode.png)
 
 
 
