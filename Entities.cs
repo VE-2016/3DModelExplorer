@@ -464,6 +464,11 @@ namespace ModelExplorer
         public AtomsTable AtomsTable { get; set; }
     }
 
+    //https://www.kegg.jp/kegg/rest/keggapi.html
+    //https://ftp.ncbi.nlm.nih.gov/blast/
+    //https://chembl.gitbook.io/chembl-interface-documentation/web-services/chembl-data-web-services
+    //https://www.lipidmaps.org/resources/REST/index.php
+    //https://www.ebi.ac.uk/pdbe/api/doc/search.html
     public class DataEx
     {
 

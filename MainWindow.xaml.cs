@@ -805,18 +805,19 @@ namespace Viewer3D
 
             if (autos != null)
             {
-
-                var files = new DirectoryInfo(fileFolder).GetFiles();
-                foreach (var df in autos.dictionary_terms.compound)
+                if (autos.dictionary_terms != null)
                 {
-                    XML_Item dg = new XML_Item();
-                    dg.Name = df;
-                    items.Add(dg);
+                    var files = new DirectoryInfo(fileFolder).GetFiles();
+                    foreach (var df in autos.dictionary_terms.compound)
+                    {
+                        XML_Item dg = new XML_Item();
+                        dg.Name = df;
+                        items.Add(dg);
 
-                    dataContext.Entries.Add(dg);
+                        dataContext.Entries.Add(dg);
 
+                    }
                 }
-
             }
 
             tpSearch.IsSelected = true;

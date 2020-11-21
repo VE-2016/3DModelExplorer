@@ -177,7 +177,7 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="300" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Title}" Foreground="Black"/>
+                                    <TextBlock Text="{Binding Name}" Foreground="Black"/>
 
                                 </Grid>
                             </DataTemplate>

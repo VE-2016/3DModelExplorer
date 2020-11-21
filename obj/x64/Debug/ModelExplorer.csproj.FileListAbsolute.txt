@@ -177,3 +177,4 @@ D:\3DModelExplorer-Github\obj\x64\Debug\ModelExplorer.csproj.CoreCompileInputs.c
 D:\3DModelExplorer-Github\obj\x64\Debug\ModelExplorer.csproj.CopyComplete
 D:\3DModelExplorer-Github\obj\x64\Debug\3DModelExplorer.exe
 D:\3DModelExplorer-Github\obj\x64\Debug\3DModelExplorer.pdb
+D:\3DModelExplorer-Github\obj\x64\Debug\ModelExplorer.csprojAssemblyReference.cache
