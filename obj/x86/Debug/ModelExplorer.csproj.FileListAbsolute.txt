@@ -1,4 +1,0 @@
-E:\Desktops\DataTemplate\obj\x86\Debug\ModelExplorer.csprojAssemblyReference.cache
-E:\Desktops\DataTemplate\obj\x86\Debug\3DModelExplorer_MarkupCompile.cache
-E:\Desktops\DataTemplate\obj\x86\Debug\MainWindow.g.cs
-E:\Desktops\DataTemplate\obj\x86\Debug\3DModelExplorer_MarkupCompile.lref
