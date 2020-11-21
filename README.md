@@ -76,7 +76,7 @@ After selecting particles names in the 'Search' tab -> models are retrieved and 
 
 Model Explorer has functionality to search for particle information from Wikipedia pages when switched to Browser Mode. After enetering search text in 'Search box' and pressing 'Search Browser' - all retrieved linkt to relevent Wikipedia pages are displayed in Browser tab. After selecting the position, it is displayed in the Browser control.
 
-![Main Application BrowserMode](./Resources/BrowserMode.png)
+![Main Application BrowserMode](./Resources/BrowserMode.png)*Model Explorer in Browser Mode, left panel with Importers - visible Property tab, right panel Browser - with searched wiki info pages*
 
 
 
