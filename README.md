@@ -72,7 +72,7 @@ After selecting particles names in the 'Search' tab -> models are retrieved and 
 
 ![Main Application ViewerMode](./Resources/3DModelExplorer.png)*Model Explorer in Viewer Mode, left panel with Importers - visible Property tab, right panel Models - with imported models*
 
-In Viewer Mode grids in X, Y, Z axis are displayed, background color can be changed (white, black), view can be recentered after previous navigation.
+In Viewer Mode grids in X, Y, Z axis are displayed, background color can be changed (white, black), view can be recentered after previous navigation. Panning, Zooming, WASD
 
 ## Browser Mode
 
@@ -80,7 +80,9 @@ Model Explorer has functionality to search for particle information from Wikiped
 
 ![Main Application BrowserMode](./Resources/BrowserMode.png)*Model Explorer in Browser Mode, left panel with Importers - visible Property tab, right panel Browser - with searched wiki info pages*
 
-After link has been entered in the Browser component - new search item links are displayed in the Browser tab - for the new eneterd link text.
+After link had been entered in the Browser component - new search item links are displayed in the Browser tab - for the new enterd link text.
+
+![Main Application Logo](./Resources/3DModelExplorer-logo2.png)
 
 
 
