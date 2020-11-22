@@ -101,6 +101,7 @@
   <ItemGroup>
     <Compile Include="App.xaml.cs" />
     <Compile Include="Entities.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -135,6 +136,9 @@
   <ItemGroup>
     <Resource Include="Resources\backward.png" />
     <Resource Include="Resources\forward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Model3D_16x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>

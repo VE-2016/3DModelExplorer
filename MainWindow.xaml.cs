@@ -16,6 +16,7 @@ namespace Viewer3D
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
+    using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using System.Windows.Media.Media3D;
     using System.Windows.Threading;
@@ -81,16 +82,88 @@ namespace Viewer3D
             timer.Tick += timer_Tick;
             timer.Start();
 
+            RequestHandler requestHandler = new RequestHandler(dataContext);
+            Browser.RequestHandler = requestHandler;
+
+
 
         }
 
         void timer_Tick(object sender, EventArgs e)
         {
-            if (dataContext.queue.Count <= 0)
-                return;
-            string obs = (string)dataContext.queue.Dequeue();
+            if (dataContext.queue.Count > 0)
+            {
+                object obs = dataContext.queue.Dequeue();
 
-            LoadProperties(obs);
+                if (obs.GetType() == typeof(string))
+
+                {
+
+                    string s = (string)obs;
+
+                    Task.Factory.StartNew(() =>
+                    {
+
+                        LoadProperties(s);
+
+                    });
+
+                }
+                else if (obs.GetType() == typeof(PropertyTable))
+                {
+
+                    Task.Factory.StartNew(() =>
+                    {
+                        lvModels2.Dispatcher.BeginInvoke(new Action(() => Update(obs)));
+
+                    });
+
+
+                }
+            }
+            if (dataContext.browserQueue.Count > 0)
+            {
+
+                string name = (string)dataContext.browserQueue.Dequeue();
+
+                if (string.IsNullOrEmpty(name))
+                    return;
+
+                Task.Factory.StartNew(() =>
+                {
+                    lbBrowse.Dispatcher.BeginInvoke(new Action(() => SearchBrowser(name)));
+
+                });
+
+            }
+
+        }
+
+        private void Update(object obs)
+        {
+            var entries = dataContext.PropEntries;
+
+            entries.Clear();
+
+            PropertyTable c = (PropertyTable)obs;
+
+            foreach (PropertiesItem pp in c.Properties)
+            {
+                object obj = pp;
+                PropertyInfo[] properties = obj.GetType().GetProperties();
+                foreach (var p in properties)
+                {
+                    var v = p.GetValue(obj);
+
+                    PropEx s = new PropEx();
+
+                    s.Name = p.Name;
+
+                    s.Properties = Convert.ToString(v);
+
+                    entries.Add(s);
+                }
+            }
         }
 
         void LoadTreeView()
@@ -306,9 +379,9 @@ namespace Viewer3D
         void LoadProperties(string name = "")
         {
 
-            var entries = dataContext.PropEntries;
+            //var entries = dataContext.PropEntries;
 
-            entries.Clear();
+            //entries.Clear();
 
             if (string.IsNullOrEmpty(name))
 
@@ -322,23 +395,25 @@ namespace Viewer3D
             if (c == null)
                 return;
 
-            foreach (PropertiesItem pp in c.Properties)
-            {
-                object obj = pp;
-                PropertyInfo[] properties = obj.GetType().GetProperties();
-                foreach (var p in properties)
-                {
-                    var v = p.GetValue(obj);
+            dataContext.queue.Enqueue(c);
 
-                    PropEx s = new PropEx();
+            //foreach (PropertiesItem pp in c.Properties)
+            //{
+            //    object obj = pp;
+            //    PropertyInfo[] properties = obj.GetType().GetProperties();
+            //    foreach (var p in properties)
+            //    {
+            //        var v = p.GetValue(obj);
 
-                    s.Name = p.Name;
+            //        PropEx s = new PropEx();
 
-                    s.Properties = Convert.ToString(v);
+            //        s.Name = p.Name;
 
-                    entries.Add(s);
-                }
-            }
+            //        s.Properties = Convert.ToString(v);
+
+            //        entries.Add(s);
+            //    }
+            //}
 
         }
 
@@ -1454,6 +1529,9 @@ namespace Viewer3D
 
         void SearchBrowser(string name)
         {
+
+            dataContext.PagesEntries.Clear();
+
             var c = DataEx.GetBrowserPagesForName(name);
 
             foreach (Pages b in c.pages)
@@ -1500,6 +1578,36 @@ namespace Viewer3D
 
                 lb.Items.Remove(v);
             }
+        }
+
+        private void grProperties_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double w = lvProps.ActualWidth;
+
+            if (w - lvPropsName.ActualWidth <= 0)
+                return;
+
+            lvPropsProperties.Width = w - lvPropsName.ActualWidth;
+
+        }
+
+        private void mViewportBlack_Click(object sender, RoutedEventArgs e)
+        {
+            view.Background = new SolidColorBrush(Colors.Black);
+            mViewportBlack.IsChecked = true;
+            mViewportWhite.IsChecked = false;
+        }
+
+        private void mViewportWhite_Click(object sender, RoutedEventArgs e)
+        {
+            view.Background = new SolidColorBrush(Colors.White);
+            mViewportBlack.IsChecked = false;
+            mViewportWhite.IsChecked = true;
+        }
+
+        private void tbCenter_Click(object sender, RoutedEventArgs e)
+        {
+            view.ZoomExtents();
         }
     }
     public class XML_Item
@@ -1981,6 +2089,8 @@ namespace Viewer3D
 
         public Queue queue = new Queue();
 
+        public Queue browserQueue = new Queue();
+
         public ObservableCollection<XML_Item> Entries { get; private set; }
 
         public ObservableCollection<PropEx> PropEntries { get; private set; }
@@ -2005,6 +2115,19 @@ namespace Viewer3D
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
+        }
+
+
+        public void BrowseSearchRequired(string name)
+        {
+            string s = name.Split("//".ToCharArray()).ToList().Last().Replace("//", "").Trim();
+
+            if (string.IsNullOrEmpty(s))
+                return;
+
+            browserQueue.Clear();
+
+            browserQueue.Enqueue(s);
         }
 
 
