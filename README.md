@@ -37,8 +37,9 @@ Open ModelExplorer.sln in Visual Studio, Restore NuGet packages, build an run.
      * Loaded XML
      * Search - results of search 
      * Properties - with particles chemical formula
-   * 3D Model Viewer
+   * 3D Model Viewer - Browser Component
    * Models page
+   * Browser page
    
 # Data Sources
 
@@ -71,12 +72,15 @@ After selecting particles names in the 'Search' tab -> models are retrieved and 
 
 ![Main Application ViewerMode](./Resources/3DModelExplorer.png)*Model Explorer in Viewer Mode, left panel with Importers - visible Property tab, right panel Models - with imported models*
 
+In Viewer Mode grids in X, Y, Z axis are displayed, background color can be changed (white, black), view can be recentered after previous navigation.
 
 ## Browser Mode
 
 Model Explorer has functionality to search for particle information from Wikipedia pages when switched to Browser Mode. After enetering search text in 'Search box' and pressing 'Search Browser' - all retrieved linkt to relevent Wikipedia pages are displayed in Browser tab. After selecting the position, it is displayed in the Browser control.
 
 ![Main Application BrowserMode](./Resources/BrowserMode.png)*Model Explorer in Browser Mode, left panel with Importers - visible Property tab, right panel Browser - with searched wiki info pages*
+
+After link has been entered in the Browser component - new search item links are displayed in the Browser tab - for the new eneterd link text.
 
 
 
