@@ -126,8 +126,6 @@ namespace Viewer3D
 
                 string name = (string)dataContext.browserQueue.Dequeue();
 
-                if (string.IsNullOrEmpty(name))
-                    return;
 
                 Task.Factory.StartNew(() =>
                 {
@@ -136,6 +134,40 @@ namespace Viewer3D
                 });
 
             }
+
+            if (dataContext.loaderQueue.Count > 0)
+            {
+
+                string name = (string)dataContext.loaderQueue.Dequeue();
+
+                if (string.IsNullOrEmpty(name))
+                    return;
+
+                Task.Factory.StartNew(() =>
+                {
+                    view.Dispatcher.BeginInvoke(new Action(() => LoadFromXML(name)));
+
+                });
+
+            }
+
+            if (dataContext.importQueue.Count > 0)
+            {
+
+                string name = (string)dataContext.importQueue.Dequeue();
+
+                if (string.IsNullOrEmpty(name))
+                    return;
+
+                Task.Factory.StartNew(() =>
+                {
+                    view.Dispatcher.BeginInvoke(new Action(() => LoadImporters(name)));
+
+                });
+
+            }
+
+
 
         }
 
@@ -260,7 +292,120 @@ namespace Viewer3D
         private void Lb_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
 
-            tbModels.IsSelected = true;
+            int i = lb.SelectedIndex;
+            if (i < 0)
+                return;
+            XML_Item d = lb.Items[i] as XML_Item;
+            if (d == null)
+                return;
+            string file = fileFolder + "\\" + d.Name;
+
+            dataContext.loaderQueue.Clear();
+
+            dataContext.loaderQueue.Enqueue(file);
+
+
+            //tbModels.IsSelected = true;
+
+
+
+
+            //dict = new Dictionary<UISphere, List<UIPipe>>();
+            //dict2 = new Dictionary<UISphere, List<UIPipe>>();
+
+            //atoms = new Dictionary<Atom, UISphere>();
+
+            //if (ObservableElements != null)
+            //    foreach (var ew in ObservableElements)
+            //        view.Children.Remove(ew);
+
+            //ObservableElements = new ObservableCollection<UIElement3D>();
+
+            //var c = DataEx.GetData(file);
+
+            //var filename = Path.GetFileNameWithoutExtension(file);
+
+            //if (c == null)
+            //    return;
+
+            //compound = c;
+
+            //string s = Serializer.Serialize<Compound>(c);
+
+            //var content = s;
+
+            //File.WriteAllText("Models\\" + filename + ".xml", content);
+
+            //CurrentModelXml = "Models\\" + filename + ".xml";
+
+
+
+            //if (c == null)
+            //    return;
+
+            //foreach (var es in c.atoms)
+            //{
+
+            //    var v = new UISphere(factor, es, es.center, Materials.Red, view);
+
+            //    view.Children.Add(v);
+
+            //    atoms.Add(es, v);
+
+            //    ObservableElements.Add(v);
+
+            //}
+
+            //foreach (var es in c.bonds)
+            //{
+
+            //    var v = new UIPipe(factor, es, es.First, es.Second, es.FirstAtom, es.SecondAtom, 0.2, Materials.Green, view);
+
+            //    List<UIPipe> af = null;
+
+            //    UISphere sf = atoms[es.FirstAtom];
+            //    if (dict.ContainsKey(sf))
+            //        af = dict[sf];
+            //    else
+            //    {
+            //        af = new List<UIPipe>();
+            //        dict.Add(sf, af);
+            //    }
+            //    af.Add(v);
+
+            //    sf = atoms[es.SecondAtom];
+            //    if (dict2.ContainsKey(sf))
+            //        af = dict2[sf];
+            //    else
+            //    {
+            //        af = new List<UIPipe>();
+            //        dict2.Add(sf, af);
+            //    }
+            //    af.Add(v);
+
+            //    view.Children.Add(v);
+
+            //    ObservableElements.Add(v);
+
+            //}
+
+            //LoadModelsFolder();
+
+            //view.InvalidateVisual();
+
+            //var namenoext = filename;
+
+            //var image = DataEx.LoadFormula(namenoext);
+
+            //imgFormula.Source = image;
+
+            //BitmapSource b = DataEx.TextToBitmap(namenoext);
+
+            //imgHeader.Source = b;
+        }
+
+        private void LoadFromXML(string file)
+        {
 
             dict = new Dictionary<UISphere, List<UIPipe>>();
             dict2 = new Dictionary<UISphere, List<UIPipe>>();
@@ -272,14 +417,6 @@ namespace Viewer3D
                     view.Children.Remove(ew);
 
             ObservableElements = new ObservableCollection<UIElement3D>();
-
-            int i = lb.SelectedIndex;
-            if (i < 0)
-                return;
-            XML_Item d = lb.Items[i] as XML_Item;
-            if (d == null)
-                return;
-            string file = fileFolder + "\\" + d.Name;
 
             var c = DataEx.GetData(file);
 
@@ -349,20 +486,27 @@ namespace Viewer3D
 
             }
 
-            LoadModelsFolder();
+            lvModels2.Dispatcher.Invoke(new Action(() =>
+            {
+                LoadModelsFolder();
 
-            view.InvalidateVisual();
+                view.InvalidateVisual();
 
-            var namenoext = filename;
+                var namenoext = filename;
 
-            var image = DataEx.LoadFormula(namenoext);
+                var image = DataEx.LoadFormula(namenoext);
 
-            imgFormula.Source = image;
+                imgFormula.Source = image;
 
-            BitmapSource b = DataEx.TextToBitmap(namenoext);
+                BitmapSource b = DataEx.TextToBitmap(namenoext);
 
-            imgHeader.Source = b;
+                imgHeader.Source = b;
+
+            }));
+
+
         }
+
 
         string ModelName()
         {
@@ -505,7 +649,118 @@ namespace Viewer3D
         private void Lb2_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
 
+            int i = lb2.SelectedIndex;
+            if (i < 0)
+                return;
+            XML_Item d = lb2.Items[i] as XML_Item;
+            if (d == null)
+                return;
+            string name = d.Name;
+
+
             tbModels.IsSelected = true;
+
+
+            dataContext.importQueue.Clear();
+
+            dataContext.importQueue.Enqueue(name);
+
+
+
+            //dict = new Dictionary<UISphere, List<UIPipe>>();
+            //dict2 = new Dictionary<UISphere, List<UIPipe>>();
+
+            //atoms = new Dictionary<Atom, UISphere>();
+
+            //if (ObservableElements != null)
+            //    foreach (var ew in ObservableElements)
+            //        view.Children.Remove(ew);
+
+            //ObservableElements = new ObservableCollection<UIElement3D>();
+
+            //int i = lb2.SelectedIndex;
+            //if (i < 0)
+            //    return;
+            //XML_Item d = lb2.Items[i] as XML_Item;
+            //if (d == null)
+            //    return;
+            //string name = d.Name;
+
+            //var (content, c) = DataEx.GetRawData(name);
+
+            //if (c == null)
+            //    return;
+
+            //compound = c;
+
+            //string s = Serializer.Serialize<Compound>(c);
+
+            //content = s;
+
+            //File.WriteAllText("Files\\Content\\" + name + ".xml", content);
+
+            //File.WriteAllText("Models\\" + name + ".xml", content);
+
+            //CurrentModelXml = "Models\\" + name + ".xml";
+
+            //foreach (var es in c.atoms)
+            //{
+
+            //    var v = new UISphere(factor, es, es.center, Materials.Red, view);
+
+            //    view.Children.Add(v);
+
+            //    atoms.Add(es, v);
+
+            //    ObservableElements.Add(v);
+
+            //}
+
+            //af = new List<UIPipe>();
+
+            //foreach (var es in c.bonds)
+            //{
+
+            //    var v = new UIPipe(factor, es, es.First, es.Second, es.FirstAtom, es.SecondAtom, 0.2, Materials.Green, view);
+
+
+
+            //    UISphere sf = atoms[es.FirstAtom];
+            //    if (dict.ContainsKey(sf))
+            //        af = dict[sf];
+            //    else
+            //    {
+            //        af = new List<UIPipe>();
+            //        dict.Add(sf, af);
+            //    }
+            //    af.Add(v);
+
+            //    sf = atoms[es.SecondAtom];
+            //    if (dict2.ContainsKey(sf))
+            //        af = dict2[sf];
+            //    else
+            //    {
+            //        af = new List<UIPipe>();
+            //        dict2.Add(sf, af);
+            //    }
+            //    af.Add(v);
+
+            //    view.Children.Add(v);
+
+            //    ObservableElements.Add(v);
+
+            //}
+
+
+            //view.InvalidateVisual();
+
+            //LoadModelsFolder();
+        }
+
+        private void LoadImporters(string name)
+        {
+
+            // tbModels.IsSelected = true;
 
             dict = new Dictionary<UISphere, List<UIPipe>>();
             dict2 = new Dictionary<UISphere, List<UIPipe>>();
@@ -518,14 +773,6 @@ namespace Viewer3D
 
             ObservableElements = new ObservableCollection<UIElement3D>();
 
-            int i = lb2.SelectedIndex;
-            if (i < 0)
-                return;
-            XML_Item d = lb2.Items[i] as XML_Item;
-            if (d == null)
-                return;
-            string name = d.Name;
-
             var (content, c) = DataEx.GetRawData(name);
 
             if (c == null)
@@ -536,6 +783,8 @@ namespace Viewer3D
             string s = Serializer.Serialize<Compound>(c);
 
             content = s;
+
+            File.WriteAllText("Files\\Content\\" + name + ".xml", content);
 
             File.WriteAllText("Models\\" + name + ".xml", content);
 
@@ -592,7 +841,26 @@ namespace Viewer3D
 
             view.InvalidateVisual();
 
-            LoadModelsFolder();
+
+            lvModels2.Dispatcher.Invoke(new Action(() =>
+            {
+                LoadModelsFolder();
+
+                view.InvalidateVisual();
+
+                var namenoext = Path.GetFileNameWithoutExtension(name);
+
+                var image = DataEx.LoadFormula(namenoext);
+
+                imgFormula.Source = image;
+
+                BitmapSource b = DataEx.TextToBitmap(namenoext);
+
+                imgHeader.Source = b;
+
+            }));
+
+            // LoadModelsFolder();
         }
 
         object obs = new object();
@@ -2087,9 +2355,15 @@ namespace Viewer3D
         }
 
 
+
+
         public Queue queue = new Queue();
 
         public Queue browserQueue = new Queue();
+
+        public Queue loaderQueue = new Queue();
+
+        public Queue importQueue = new Queue();
 
         public ObservableCollection<XML_Item> Entries { get; private set; }
 

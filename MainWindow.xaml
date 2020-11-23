@@ -11,6 +11,30 @@
     <Window.CommandBindings>
     </Window.CommandBindings>
     <Window.Resources>
+        <Style TargetType="Button">
+        </Style>
+        <Style x:Key="ButtonStyleEx" TargetType="{x:Type Button}">
+
+            
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ViewerMode}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+        <Style TargetType="Separator">
+        </Style>
+        <Style x:Key="SeparatorStyleEx" TargetType="{x:Type Separator}">
+
+
+            <Setter Property="Visibility" Value="Visible"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ViewerMode}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
     </Window.Resources>
     <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,0" LastChildFill="True">
@@ -70,22 +94,22 @@
 
         <ToolBarTray DockPanel.Dock="Top" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
             <ToolBar  Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" ToolBar.OverflowMode="Never" ToolBarTray.IsLocked="True" Loaded="ToolBar_Loaded">
-                <Button Content="Imports"   PreviewMouseLeftButtonDown="ToggleImporters"/>
-                <Button Content="Models"  PreviewMouseLeftButtonDown="ToggleModels" />
-               
+                <Button Content="Browser Mode" Background="LightGray" x:Name="tbPropertie" ToolTip="Toggle Browser Mode vs Viewer Mode" Click="tbPropertie_Click"/>
                 <Separator />
+                <Button Content="Imports"  ToolTip="Display or hide Importers panel" PreviewMouseLeftButtonDown="ToggleImporters"/>
+                <Button Content="Models"  ToolTip="Display or hide Models/Browser panel" PreviewMouseLeftButtonDown="ToggleModels" />
+                <Separator  Style="{StaticResource SeparatorStyleEx}" />
             </ToolBar>
             <ToolBar  Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" ToolBar.OverflowMode="Never" ToolBarTray.IsLocked="True" Loaded="ToolBar_Loaded">
-                <Button Content="Grid X"  Click="XGrid_Click" IsEnabled="{Binding ViewerMode}"  />
-                <Button Content="Grid Y" Click="YGrid_Click" IsEnabled="{Binding ViewerMode}" />
-                <Button Content="Grid Z" Click="ZGrid_Click" IsEnabled="{Binding ViewerMode}"/>
-                <Separator />
-                <Button Content="Show Grids" Click="GridVisible_Click" IsEnabled="{Binding ViewerMode}" />
-                <Button Content="Hide Grids" Click="GridInvisible_Click" IsEnabled="{Binding ViewerMode}"/>
+                <Button Content="Grid X"  Click="XGrid_Click" IsEnabled="{Binding ViewerMode}" Style="{StaticResource ButtonStyleEx}"></Button>
+                <Button Content="Grid Y" Click="YGrid_Click" IsEnabled="{Binding ViewerMode}" Style="{StaticResource ButtonStyleEx}" />
+                <Button Content="Grid Z" Click="ZGrid_Click" IsEnabled="{Binding ViewerMode}" Style="{StaticResource ButtonStyleEx}"/>
+                <Separator  Style="{StaticResource SeparatorStyleEx}" />
+                <Button Content="Show Grids" Click="GridVisible_Click" IsEnabled="{Binding ViewerMode}" Style="{StaticResource ButtonStyleEx}"/>
+                <Button Content="Hide Grids" Click="GridInvisible_Click" IsEnabled="{Binding ViewerMode}" Style="{StaticResource ButtonStyleEx}"/>
                 <Button Content="New" x:Name="tbNew" Click="tbNew_Click" IsEnabled="{Binding ViewerMode}"/>
-                <Button Content="Center" x:Name="tbCenter" Click="tbCenter_Click" IsEnabled="{Binding ViewerMode}"/>
-                <Separator />
-                <Button Content="Browser Mode" x:Name="tbPropertie" Click="tbPropertie_Click"/>
+                <Button Content="Center" x:Name="tbCenter" Click="tbCenter_Click" IsEnabled="{Binding ViewerMode}" Style="{StaticResource ButtonStyleEx}"/>
+                             
             </ToolBar>
         </ToolBarTray>
         <Grid x:Name="plImporters" Margin="0,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" DockPanel.Dock="Top">
